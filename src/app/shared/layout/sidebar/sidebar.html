@@ -1,0 +1,10 @@
+<section class="sidebar">
+  <button matIconButton class="sidebar__btn-close" (click)="sidenav.closeOverlay()">
+    <mat-icon fontIcon="close" class="sidebar__icon"></mat-icon>
+  </button>
+  <nav class="sidebar__nav">
+    <a class="sidebar__link" [routerLink]="`/${APP_ROUTES.HOME}`">Inicio</a>
+    <a class="sidebar__link" [routerLink]="">Tienda</a>
+  </nav>
+  <p class="sidebar__descript">Disfruta de nuestras ofertas especiales en nuestra tienda.</p>
+</section>

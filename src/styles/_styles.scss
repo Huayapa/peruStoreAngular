@@ -17,6 +17,13 @@ html {
       density: 0,
     )
   );
+  font-family: sans-serif;
+  overflow-x: hidden;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
@@ -35,4 +42,15 @@ body {
   // Reset the user agent margin.
   margin: 0;
   height: 100%;
+}
+
+:root {
+  --primary: #f05a28;
+  --primary-20: #f05a2820;
+  --secondary: #ffffff;
+  --tertiary: #1c1c1c;
+  --tertiary-20: #1c1c1c20;
+  --border-primary: #c1c1c1;
+  --text-primary: #1c1c1c;
+  --text-secondary: #ffffff;
 }

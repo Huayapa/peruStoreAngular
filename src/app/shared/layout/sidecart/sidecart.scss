@@ -1,0 +1,13 @@
+.sidecart {
+  padding: 3rem 1rem 1rem 1rem;
+  height: 100%;
+  background-color: var(--secondary);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  &__btn-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}

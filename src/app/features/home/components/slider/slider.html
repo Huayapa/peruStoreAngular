@@ -1,0 +1,20 @@
+<section class="slider">
+  <div class="slider__row">
+    @for (slide of slides(); track $index; let i = $index) {
+      <div class="slider__slide" [class.slider__slide--active]="i === currentIndex()">
+        <img class="slider__img" [src]="slide.image" [alt]="slide.title" />
+        <div class="slider__caption">
+          <h2 class="slider__title">{{ slide.title }}</h2>
+          <h4 class="slider__subtitle">{{ slide.subtitle }}</h4>
+          <p class="slider__descript">{{ slide.descript }}</p>
+        </div>
+      </div>
+    }
+  </div>
+  <button matIconButton class="slider__btn-next" (click)="next()">
+    <mat-icon class="slider__btn-icon" fontIcon="arrow_forward_ios"></mat-icon>
+  </button>
+  <button matIconButton class="slider__btn-prev" (click)="prev()">
+    <mat-icon class="slider__btn-icon" fontIcon="arrow_back_ios"></mat-icon>
+  </button>
+</section>

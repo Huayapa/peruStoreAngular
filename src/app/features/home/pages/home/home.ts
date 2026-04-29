@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ISlide } from '../../interfaces/slider.interface';
 import { Slider } from '../../components/slider/slider';
 import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
+import { ProductService } from '../../../../core/services/product';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -31,5 +33,6 @@ export default class HomePage {
     },
     { image: '/image/banner1.png' },
   ];
-  products: string[] = ['1', '2', '3', '4', '5', '6', '7', '8'];
+  private readonly _product = inject(ProductService);
+  products = toSignal(this._product.getProducts(), { initialValue: [] });
 }

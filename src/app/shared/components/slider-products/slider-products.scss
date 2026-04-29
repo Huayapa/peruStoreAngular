@@ -31,17 +31,3 @@
     transition: transform 0.3s ease;
   }
 }
-
-.card-prod {
-  min-width: calc(100% / 4 - 1rem);
-  flex-shrink: 0;
-  background-color: var(--primary);
-  min-height: 320px;
-  padding: 1rem;
-  border-radius: 1rem;
-  &__title {
-    font-size: 1.2rem;
-    text-align: center;
-    color: var(--secondary);
-  }
-}

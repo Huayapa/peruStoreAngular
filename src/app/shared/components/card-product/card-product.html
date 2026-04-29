@@ -1,0 +1,12 @@
+<mat-card class="card-prod" appearance="outlined">
+  <img class="card-prod__img" mat-card-image [src]="product().image" [alt]="product().title" />
+  <mat-card-header class="card-prod__header">
+    <mat-card-title class="card-prod__title">{{ product().title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-actions>
+    <button class="card-prod__add-cart" matFab extended>
+      <mat-icon>shopping_bag</mat-icon>
+      Agregar al carrito
+    </button>
+  </mat-card-actions>
+</mat-card>

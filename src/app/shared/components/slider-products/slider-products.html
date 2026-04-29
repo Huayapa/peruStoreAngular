@@ -13,9 +13,7 @@
   <div class="slider-product__slider">
     <div class="slider-product__slider-track" [style.transform]="translateX">
       @for (prod of products(); track $index) {
-        <article class="card-prod">
-          <h3 class="card-prod__title">{{ prod }}</h3>
-        </article>
+        <app-card-product [product]="prod" />
       }
     </div>
   </div>

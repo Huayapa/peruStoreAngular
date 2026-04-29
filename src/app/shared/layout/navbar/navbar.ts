@@ -5,7 +5,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
 import { Sidebar } from '../sidebar/sidebar';
 import { Sidecart } from '../sidecart/sidecart';
-import { Sidenav } from '../../../core/services/sidenav';
+import { SidenavService } from '../../../core/services/sidenav';
 
 @Component({
   selector: 'app-navbar',
@@ -15,5 +15,5 @@ import { Sidenav } from '../../../core/services/sidenav';
 })
 export class Navbar {
   readonly APP_ROUTES = APP_ROUTES;
-  readonly sidenav = inject(Sidenav);
+  readonly sidenav = inject(SidenavService);
 }

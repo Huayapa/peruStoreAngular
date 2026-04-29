@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Sidenav } from '../../../core/services/sidenav';
+import { SidenavService } from '../../../core/services/sidenav';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -10,5 +10,5 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './sidecart.scss',
 })
 export class Sidecart {
-  readonly sidenav = inject(Sidenav);
+  readonly sidenav = inject(SidenavService);
 }

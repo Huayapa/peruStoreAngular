@@ -3,7 +3,7 @@ type ISideActive = 'none' | 'sidecart' | 'sidebar';
 @Injectable({
   providedIn: 'root',
 })
-export class Sidenav {
+export class SidenavService {
   readonly sideActive = signal<ISideActive>('none');
   toogleSideCart() {
     this.sideActive.update((value) => (value !== 'sidecart' ? 'sidecart' : 'none'));

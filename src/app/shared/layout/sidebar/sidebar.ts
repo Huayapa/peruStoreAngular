@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
 import { RouterLink } from '@angular/router';
-import { Sidenav } from '../../../core/services/sidenav';
+import { SidenavService } from '../../../core/services/sidenav';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 
@@ -13,5 +13,5 @@ import { MatIconButton } from '@angular/material/button';
 })
 export class Sidebar {
   readonly APP_ROUTES = APP_ROUTES;
-  readonly sidenav = inject(Sidenav);
+  readonly sidenav = inject(SidenavService);
 }

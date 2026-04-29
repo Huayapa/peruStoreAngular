@@ -1,0 +1,47 @@
+.slider-product {
+  width: 100%;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__title {
+    width: fit-content;
+    font-size: clamp(1rem, 4vw, 1.6rem);
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60%;
+      height: 3px;
+      background-color: var(--primary);
+    }
+  }
+  &__slider {
+    overflow: hidden;
+    border-radius: 1rem;
+    padding: 2rem 0;
+    flex: 1;
+  }
+  &__slider-track {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+  }
+}
+
+.card-prod {
+  min-width: calc(100% / 4 - 1rem);
+  flex-shrink: 0;
+  background-color: var(--primary);
+  min-height: 320px;
+  padding: 1rem;
+  border-radius: 1rem;
+  &__title {
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--secondary);
+  }
+}

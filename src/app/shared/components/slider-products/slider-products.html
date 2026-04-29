@@ -1,0 +1,22 @@
+<section class="slider-product">
+  <div class="slider-product__header">
+    <h2 class="slider-product__title">{{ title() }}</h2>
+    <div>
+      <button matIconButton class="slider__btn-prev" (click)="prev()">
+        <mat-icon class="slider__btn-icon" fontIcon="arrow_back_ios"></mat-icon>
+      </button>
+      <button matIconButton class="slider__btn-next" (click)="next()">
+        <mat-icon class="slider__btn-icon" fontIcon="arrow_forward_ios"></mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="slider-product__slider">
+    <div class="slider-product__slider-track" [style.transform]="translateX">
+      @for (prod of products(); track $index) {
+        <article class="card-prod">
+          <h3 class="card-prod__title">{{ prod }}</h3>
+        </article>
+      }
+    </div>
+  </div>
+</section>

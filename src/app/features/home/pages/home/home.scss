@@ -1,12 +1,38 @@
 .homepage {
+  padding: 2rem 0;
   &__banner {
     width: 100%;
     max-width: 100rem;
     margin-inline: auto;
     padding-inline: 1rem;
+    margin-bottom: 2rem;
   }
   &__container {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  &__call-to-action {
+    background-color: var(--primary);
+    padding: 4rem 2rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-secondary);
+    background-image: linear-gradient(#00000020, #00000020), url('/image/banner3.png');
+    background-position: center;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  &__title {
+    font-size: 1.4rem;
+  }
+  &__code {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 }

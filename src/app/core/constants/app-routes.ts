@@ -10,6 +10,7 @@ export const APP_ROUTES = {
   },
   PRODUCTS: {
     ROOT: 'products',
-    DETAIL: (id: string) => `product/${id}`,
+    DETAIL: 'products/:id',
+    DETAIL_LINK: (id: string) => `products/${id}`,
   },
 } as const;

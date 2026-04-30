@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
@@ -16,4 +16,10 @@ import { SidenavService } from '../../../core/services/sidenav';
 export class Navbar {
   readonly APP_ROUTES = APP_ROUTES;
   readonly sidenav = inject(SidenavService);
+  hideTop = false;
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.hideTop = window.scrollY > 0;
+  }
 }

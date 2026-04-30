@@ -39,8 +39,8 @@ body {
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
+  scroll-behavior: smooth;
   margin: 0;
-  height: 100%;
 }
 
 :root {

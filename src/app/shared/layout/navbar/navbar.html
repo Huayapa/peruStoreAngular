@@ -1,5 +1,5 @@
 <header class="header">
-  <section class="header__top">
+  <section class="header__top" [class.header__top--hidden]="hideTop">
     <span class="header__span">Calle Gran Vía 45, 28013 Madrid, Pais falso.</span>
     <span class="header__span">example@gmail.com</span>
   </section>
@@ -7,6 +7,7 @@
   <section class="header__content">
     <div class="header__logo" [routerLink]="`/${APP_ROUTES.HOME}`" role="link">
       <img [routerLink]="" src="/image/logo2.png" alt="Logo" class="header__img" />
+      <h2 class="header__logo-title">Peru Store</h2>
     </div>
     <div class="header__bar">
       <nav class="header__navbar">

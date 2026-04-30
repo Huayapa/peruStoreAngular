@@ -4,10 +4,11 @@ import { Slider } from '../../components/slider/slider';
 import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
 import { ProductService } from '../../../../core/services/product';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Categories } from '../../components/categories/categories';
 
 @Component({
   selector: 'app-home',
-  imports: [Slider, SliderProducts],
+  imports: [Slider, SliderProducts, Categories],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

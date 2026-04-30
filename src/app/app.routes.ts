@@ -3,7 +3,7 @@ import { APP_ROUTES } from './core/constants/app-routes';
 
 export const routes: Routes = [
   {
-    path: APP_ROUTES.HOME,
+    path: APP_ROUTES.HOME.ROOT,
     loadChildren: () => import('./features/home/home.routes').then((r) => r.HOME_ROUTES),
   },
   {

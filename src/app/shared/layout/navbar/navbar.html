@@ -5,13 +5,13 @@
   </section>
 
   <section class="header__content">
-    <div class="header__logo" [routerLink]="`/${APP_ROUTES.HOME}`" role="link">
+    <div class="header__logo" [routerLink]="`/${APP_ROUTES.HOME.ROOT}`" role="link">
       <img [routerLink]="" src="/image/logo2.png" alt="Logo" class="header__img" />
       <h2 class="header__logo-title">Peru Store</h2>
     </div>
     <div class="header__bar">
       <nav class="header__navbar">
-        <a class="header__link" [routerLink]="`/${APP_ROUTES.HOME}`">Inicio</a>
+        <a class="header__link" [routerLink]="`/${APP_ROUTES.HOME.ROOT}`">Inicio</a>
         <a class="header__link" [routerLink]="`/${APP_ROUTES.PRODUCTS.ROOT}`">Tienda</a>
       </nav>
       <div class="header__actions">
@@ -22,7 +22,10 @@
         <button matIconButton (click)="sidenav.toogleSideCart()">
           <mat-icon fontIcon="shopping_cart"></mat-icon>
         </button>
-        <button matIconButton [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.LOGIN}`">
+        <button
+          matIconButton
+          [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.LOGIN.ROOT}`"
+        >
           <mat-icon fontIcon="login"></mat-icon>
         </button>
         <button matIconButton class="header__btn" (click)="sidenav.toogleSideBar()">

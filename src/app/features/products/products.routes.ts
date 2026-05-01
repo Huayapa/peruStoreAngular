@@ -3,7 +3,7 @@ import { APP_ROUTES } from '../../core/constants/app-routes';
 
 export const PRODUCTS_ROUTES: Routes = [
   {
-    path: APP_ROUTES.PRODUCTS.ROOT,
+    path: '',
     title: APP_ROUTES.PRODUCTS.TITLE,
     data: { breadcrumb: APP_ROUTES.PRODUCTS.TITLE },
     loadComponent: () => import('./pages/shop/shop'),

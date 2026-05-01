@@ -1,1 +1,22 @@
-<p>breadcrumb works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb-list">
+    @for (bc of breadcrumbs$ | async; track $index; let last = $last) {
+      <li class="breadcrumb-list__row">
+        @if (bc.label === 'Inicio') {
+          <button matIconButton [routerLink]="bc.url">
+            <mat-icon class="breadcrumb-list__icon">home</mat-icon>
+          </button>
+        } @else {
+          <a class="breadcrumb-list__link" [routerLink]="bc.url">{{ bc.label }}</a>
+        }
+        @if (!last) {
+          <mat-icon
+            class="breadcrumb-list__icon"
+            aria-hidden="false"
+            fontIcon="chevron_right"
+          ></mat-icon>
+        }
+      </li>
+    }
+  </ol>
+</nav>

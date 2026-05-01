@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-shop',
-  imports: [],
+  imports: [Breadcrumb],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
 })

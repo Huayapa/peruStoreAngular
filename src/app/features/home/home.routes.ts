@@ -5,7 +5,6 @@ export const HOME_ROUTES: Routes = [
   {
     path: '',
     title: APP_ROUTES.HOME.TITLE,
-    data: { breadcrumb: APP_ROUTES.HOME.TITLE },
     loadComponent: () => import('./pages/home/home'),
   },
 ];

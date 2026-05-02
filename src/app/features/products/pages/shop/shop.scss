@@ -1,25 +1,5 @@
 .shop {
   padding-top: 2rem;
-  &__banner {
-    background-color: var(--primary);
-    padding: 1rem;
-    border-radius: 1rem;
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    background-image: linear-gradient(var(--primary), var(--tertiary-80));
-  }
-  &__title {
-    font-size: 4rem;
-    text-transform: uppercase;
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--text-secondary);
-    text-align: center;
-  }
   &__main {
     width: 100%;
     padding: 2rem 0;

@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductService } from '../../../../core/services/product';
 import { CardProduct } from '../../../../shared/components/card-product/card-product';
+import { BannerSection } from '../../../home/components/banner-section/banner-section';
 
 @Component({
   selector: 'app-shop',
-  imports: [Breadcrumb, CardProduct],
+  imports: [CardProduct, BannerSection],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
 })

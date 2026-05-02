@@ -7,11 +7,24 @@
     align-items: center;
   }
   &__icon {
-    color: var(--primary);
+    color: var(--secondary);
   }
   &__link {
     font-size: 1rem;
-    color: var(--primary);
+    color: var(--secondary);
     text-decoration: none;
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      width: 0%;
+      height: 2px;
+      background-color: var(--secondary);
+      transition: all 0.4s ease;
+    }
+    &:hover::before {
+      width: 80%;
+    }
   }
 }

@@ -30,4 +30,24 @@
     gap: 1rem;
     transition: transform 0.3s ease;
   }
+  &__slider-product {
+    max-width: calc(100% / 4 - 1rem);
+    min-width: calc(100% / 4 - 1rem);
+    flex-shrink: 0;
+    min-height: 300px;
+    @media (max-width: 1200px) {
+      max-width: calc(100% / 3 - 1rem);
+      min-width: calc(100% / 3 - 1rem);
+      min-height: 200px;
+    }
+    @media (max-width: 900px) {
+      max-width: calc(100% / 2 - 1rem);
+      min-width: calc(100% / 2 - 1rem);
+      min-height: 200px;
+    }
+    @media (max-width: 600px) {
+      max-width: calc(100% / 1 - 1rem);
+      min-width: calc(100% / 1 - 1rem);
+    }
+  }
 }

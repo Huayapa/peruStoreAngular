@@ -1,8 +1,22 @@
 <main class="shop">
   <div class="container">
-    <section class="shop__baner">
-      <h1>Tienda</h1>
+    <section class="shop__banner">
+      <h1 class="shop__title">Tienda</h1>
       <app-breadcrumb />
     </section>
+    <div class="shop__main">
+      <aside class="shop__filters">
+        <div class="shop__filters-content">
+          <h2 class="shop__filters-title">Filtros</h2>
+        </div>
+      </aside>
+      <section class="shop__products">
+        @for (prod of products(); track $index) {
+          <app-card-product [product]="prod" />
+        } @empty {
+          <p>No hay prodcuctos disponibles</p>
+        }
+      </section>
+    </div>
   </div>
 </main>

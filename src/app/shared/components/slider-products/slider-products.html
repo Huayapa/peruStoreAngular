@@ -13,7 +13,7 @@
   <div class="slider-product__slider">
     <div class="slider-product__slider-track" [style.transform]="translateX">
       @for (prod of products(); track $index) {
-        <app-card-product [product]="prod" />
+        <app-card-product class="slider-product__slider-product" [product]="prod" />
       }
     </div>
   </div>

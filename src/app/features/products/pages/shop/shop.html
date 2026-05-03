@@ -5,10 +5,40 @@
       <aside class="shop__filters">
         <div class="shop__filters-content">
           <h2 class="shop__filters-title">Filtros</h2>
+          <form [formGroup]="form" class="shop__filters-form">
+            <div>
+              <h3>Buscador</h3>
+              <label class="shop__main-search">
+                <input class="shop__search" type="search" formControlName="fsearch" />
+                <mat-icon fontIcon="search"></mat-icon>
+              </label>
+            </div>
+            <div>
+              <h3>Rango de Precio</h3>
+              <mat-slider min="0" max="10000">
+                <input formControlName="fmin" matSliderStartThumb />
+                <input formControlName="fmax" matSliderEndThumb />
+              </mat-slider>
+            </div>
+            <div>
+              <h3>Categoria</h3>
+              <ul>
+                @for (category of categories(); track category; let i = $index) {
+                  <li>
+                    <mat-checkbox
+                      (change)="onCategoryChange(category, $event.checked)"
+                      [value]="category"
+                      >{{ category }}</mat-checkbox
+                    >
+                  </li>
+                }
+              </ul>
+            </div>
+          </form>
         </div>
       </aside>
       <section class="shop__products">
-        @for (prod of products(); track $index) {
+        @for (prod of products$ | async; track $index) {
           <app-card-product [product]="prod" />
         } @empty {
           <p>No hay prodcuctos disponibles</p>

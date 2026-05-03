@@ -15,14 +15,21 @@
     border: 1px solid var(--border-primary);
     border-radius: 1rem;
   }
+  &__filters-form {
+    padding: 1.4rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
   &__filters-title {
     width: fit-content;
     font-size: clamp(1rem, 4vw, 1.6rem);
     position: relative;
+    line-height: 1.2;
     &::before {
       content: '';
       position: absolute;
-      bottom: -8px;
+      bottom: -4px;
       left: 0;
       width: 60%;
       height: 3px;
@@ -39,5 +46,21 @@
     @media (max-width: 500px) {
       grid-template-columns: 100%;
     }
+  }
+  &__main-search {
+    border: 2px solid var(--border-primary);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    &:focus-within {
+      background-color: var(--tertiary-20);
+    }
+  }
+  &__search {
+    width: 100%;
+    outline: none;
+    background-color: transparent;
+    border: none;
   }
 }

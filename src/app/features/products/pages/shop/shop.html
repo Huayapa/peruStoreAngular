@@ -27,6 +27,7 @@
                   <li>
                     <mat-checkbox
                       (change)="onCategoryChange(category, $event.checked)"
+                      [checked]="isCategoryChecked(category)"
                       [value]="category"
                       >{{ category }}</mat-checkbox
                     >
@@ -38,7 +39,7 @@
         </div>
       </aside>
       <section class="shop__products">
-        @for (prod of products$ | async; track $index) {
+        @for (prod of products(); track $index) {
           <app-card-product [product]="prod" />
         } @empty {
           <p>No hay prodcuctos disponibles</p>

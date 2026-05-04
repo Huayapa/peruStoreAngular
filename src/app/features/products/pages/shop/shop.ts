@@ -8,21 +8,11 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
-import { BehaviorSubject, debounceTime, switchMap } from 'rxjs';
-import { IProduct } from '../../../../shared/interfaces/product.interface';
-import { AsyncPipe } from '@angular/common';
+import { debounceTime, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-shop',
-  imports: [
-    CardProduct,
-    BannerSection,
-    ReactiveFormsModule,
-    MatCheckbox,
-    MatIcon,
-    MatSliderModule,
-    AsyncPipe,
-  ],
+  imports: [CardProduct, BannerSection, ReactiveFormsModule, MatCheckbox, MatIcon, MatSliderModule],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
 })
@@ -31,9 +21,24 @@ export default class ShopPage {
   private readonly _router = inject(Router);
   private readonly _form = inject(NonNullableFormBuilder);
   private readonly _product = inject(ProductService);
-  private readonly products = new BehaviorSubject<IProduct[]>([]);
-  readonly products$ = this.products.asObservable();
-  categories = toSignal(this._product.getCategory(), { initialValue: [] });
+
+  readonly categories = toSignal(this._product.getCategory(), { initialValue: [] });
+  readonly products = toSignal(
+    this._routeActive.queryParams.pipe(
+      takeUntilDestroyed(),
+      switchMap((params) => {
+        const filters: IFilterProduct = {
+          categories: params['category'] ? [].concat(params['category']) : [],
+          search: params['search'] ? String(params['search']) : '',
+          min: params['min'] ? Number(params['min']) : 0,
+          max: params['max'] ? Number(params['max']) : 10000,
+        };
+
+        return this._product.getFilteredProducts(filters);
+      }),
+    ),
+    { initialValue: [] },
+  );
 
   form = this._form.group({
     fsearch: '',
@@ -43,22 +48,20 @@ export default class ShopPage {
   });
 
   constructor() {
-    this._routeActive.queryParams
-      .pipe(
-        takeUntilDestroyed(),
-        switchMap((params) => {
-          const filters: IFilterProduct = {
-            categories: params['category'] ? ([] as string[]).concat(params['category']) : [],
-            search: params['search'] ? String(params['search']) : '',
-            min: params['min'] ? Number(params['min']) : 0,
-            max: params['max'] ? Number(params['max']) : 10000,
-          };
-          return this._product.getFilteredProducts(filters);
-        }),
-      )
-      .subscribe((data) => {
-        this.products.next(data);
-      });
+    const initialValue = this._routeActive.snapshot.queryParams;
+    if (initialValue['category']) {
+      const categories = [].concat(initialValue['category']);
+      categories.forEach((cat) => this.form.controls.fcategory.push(this._form.control(cat)));
+    }
+    if (initialValue['search']) {
+      this.form.controls.fsearch.setValue(initialValue['search'], { emitEvent: false });
+    }
+    if (initialValue['min']) {
+      this.form.controls.fmin.setValue(initialValue['min'], { emitEvent: false });
+    }
+    if (initialValue['max']) {
+      this.form.controls.fmax.setValue(initialValue['max'], { emitEvent: false });
+    }
 
     this.form.valueChanges
       .pipe(debounceTime(500), takeUntilDestroyed())
@@ -83,5 +86,9 @@ export default class ShopPage {
       const index = fcategory.controls.findIndex((c) => c.value === category);
       fcategory.removeAt(index);
     }
+  }
+
+  isCategoryChecked(category: string): boolean {
+    return this.form.controls.fcategory.controls.some((c) => c.value === category);
   }
 }

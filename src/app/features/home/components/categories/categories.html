@@ -2,7 +2,11 @@
   <h2 class="categories__title">Categorias</h2>
   <div class="categories__list">
     @for (category of categories(); track $index) {
-      <article class="category-card">
+      <article
+        class="category-card"
+        [routerLink]="[APP_ROUTES.PRODUCTS.ROOT]"
+        [queryParams]="{ category }"
+      >
         <span class="category-card__title">{{ category }}</span>
       </article>
     }

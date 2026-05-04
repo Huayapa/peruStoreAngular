@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { APP_ROUTES } from '../../core/constants/app-routes';
+import { productTitleResolver } from './resolvers/product-title-resolver';
 
 export const PRODUCTS_ROUTES: Routes = [
   {
@@ -10,7 +11,7 @@ export const PRODUCTS_ROUTES: Routes = [
   },
   {
     path: APP_ROUTES.PRODUCTS.DETAIL.ROOT,
-    title: APP_ROUTES.PRODUCTS.DETAIL.TITLE,
+    title: productTitleResolver,
     data: { breadcrumb: APP_ROUTES.PRODUCTS.TITLE },
     loadComponent: () => import('./pages/prod-details/prod-details'),
   },

@@ -3,13 +3,24 @@ import { MatIcon } from '@angular/material/icon';
 import { MatCardActions, MatCard, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { IProduct } from '../../interfaces/product.interface';
 import { MatFabButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { APP_ROUTES } from '../../../core/constants/app-routes';
 
 @Component({
   selector: 'app-card-product',
-  imports: [MatIcon, MatCardActions, MatCard, MatCardHeader, MatCardTitle, MatFabButton],
+  imports: [
+    MatIcon,
+    MatCardActions,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatFabButton,
+    RouterLink,
+  ],
   templateUrl: './card-product.html',
   styleUrl: './card-product.scss',
 })
 export class CardProduct {
   readonly product = input.required<IProduct>();
+  readonly APP_ROUTES = APP_ROUTES;
 }

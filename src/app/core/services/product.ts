@@ -16,13 +16,17 @@ export class ProductService {
   private readonly urlDomain = environment.apiUrl;
   private readonly http = inject(HttpClient);
   getProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(`${this.urlDomain}/products`);
+    return this.http.get<IProduct[]>(`${this.urlDomain}products`);
+  }
+
+  getProductId(id: number): Observable<IProduct> {
+    return this.http.get<IProduct>(`${this.urlDomain}products/${id}`);
   }
 
   getFilteredProducts(filters: IFilterProduct): Observable<IProduct[]> {
     const { categories, search, min, max } = filters;
     const normalizedSearch = search.trim().toLowerCase();
-    return this.http.get<IProduct[]>(`${this.urlDomain}/products`).pipe(
+    return this.http.get<IProduct[]>(`${this.urlDomain}products`).pipe(
       map((product) =>
         product.filter((p) => {
           const matchCategory = categories.length === 0 || categories.includes(p.category);

@@ -1,1 +1,31 @@
-<p>prod-details works!</p>
+<main class="prod-detail">
+  <div class="container">
+    <section class="prod-detail__main">
+      @if (product()) {
+        <img class="prod-detail__img" [src]="product()?.image" [alt]="product()?.title" />
+        <div class="prod-detail__info">
+          <h1 class="prod-detail__title">{{ product()?.title }}</h1>
+          <span class="prod-detail__category">{{ product()?.category }}</span>
+          <p class="prod-detail__descript">{{ product()?.description }}</p>
+          <strong class="prod-detail__price">{{ product()?.price | currency: 'USD' }}</strong>
+          <button class="prod-detail__btn" matFab extended>
+            <mat-icon>shopping_cart</mat-icon>
+            Añadir al carrito
+          </button>
+        </div>
+      } @else {
+        <div class="loading prod-detail__img"></div>
+        <div class="prod-detail__info">
+          <div class="loading prod-detail__title" style="width: 100%"></div>
+          <div class="loading prod-detail__category" style="width: 60%"></div>
+          <div class="loading prod-detail__descript" style="width: 100%"></div>
+          <div class="loading prod-detail__price" style="width: 40%"></div>
+          <div class="loading prod-detail__btn" style="width: 100%"></div>
+        </div>
+      }
+    </section>
+  </div>
+  <div class="container">
+    <app-slider-products title="Productos relacionados" [products]="products()" />
+  </div>
+</main>

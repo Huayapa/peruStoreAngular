@@ -11,7 +11,7 @@ export const APP_ROUTES_OLD = {
   PRODUCTS: {
     ROOT: 'products',
     DETAIL: 'products/:id',
-    DETAIL_LINK: (id: string) => `products/${id}`,
+    DETAIL_LINK: (id: number) => `products/${id}`,
   },
 } as const;
 
@@ -40,9 +40,8 @@ export const APP_ROUTES = {
     ROOT: 'products',
     TITLE: 'Tienda',
     DETAIL: {
-      ROOT: 'products/:id',
-      TITLE: 'Nombre temporal',
-      DETAIL_LINK: (id: string) => `products/${id}`,
+      ROOT: ':id',
+      DETAIL_LINK: (id: number) => `/products/${id}`,
     },
   },
 } as const;

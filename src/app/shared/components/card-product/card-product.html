@@ -1,4 +1,8 @@
-<mat-card class="card-prod" appearance="outlined">
+<mat-card
+  class="card-prod"
+  appearance="outlined"
+  [routerLink]="APP_ROUTES.PRODUCTS.DETAIL.DETAIL_LINK(product().id)"
+>
   <img class="card-prod__img" mat-card-image [src]="product().image" [alt]="product().title" />
   <mat-card-header class="card-prod__header">
     <mat-card-title class="card-prod__title">{{ product().title }}</mat-card-title>

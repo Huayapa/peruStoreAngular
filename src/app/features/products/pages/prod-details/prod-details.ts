@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, EMPTY, map, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, map, switchMap, tap } from 'rxjs';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { ProductService } from '../../../../core/services/product';
 import { IProduct } from '../../../../shared/interfaces/product.interface';
@@ -21,8 +21,8 @@ export default class ProdDetailsPage {
   private readonly _router = inject(Router);
   private readonly _product = inject(ProductService);
   readonly APP_ROUTES = APP_ROUTES;
+  category = signal<string[]>([]);
 
-  products = toSignal(this._product.getProducts(), { initialValue: [] });
   product = toSignal<IProduct | null>(
     this._ActivatedRouter.paramMap.pipe(
       map((param) => Number(param.get('id'))),
@@ -32,6 +32,7 @@ export default class ProdDetailsPage {
             if (!product || !product.id) {
               this._router.navigate([APP_ROUTES.HOME.ROOT]);
             }
+            this.category.set([product.category]);
           }),
           catchError(() => {
             this._router.navigate([APP_ROUTES.HOME.ROOT]);
@@ -41,5 +42,12 @@ export default class ProdDetailsPage {
       ),
     ),
     { initialValue: null },
+  );
+  products = toSignal(
+    toObservable(this.category).pipe(
+      filter((categories) => categories.length > 0),
+      switchMap((categories) => this._product.getFilteredProducts({ categories })),
+    ),
+    { initialValue: { products: [], total: 0 } },
   );
 }

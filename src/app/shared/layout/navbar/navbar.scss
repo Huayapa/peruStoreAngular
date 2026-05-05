@@ -69,21 +69,6 @@
       background-color: var(--primary);
     }
   }
-  &__main-search {
-    border: 1px solid var(--border-primary);
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    padding: 5px 20px;
-    &:focus-within {
-      background-color: var(--primary-20);
-    }
-  }
-  &__search {
-    outline: none;
-    background-color: transparent;
-    border: none;
-  }
   &__btn {
     display: none;
   }

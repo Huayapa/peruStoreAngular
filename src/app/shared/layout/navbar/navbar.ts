@@ -6,10 +6,11 @@ import { APP_ROUTES } from '../../../core/constants/app-routes';
 import { Sidebar } from '../sidebar/sidebar';
 import { Sidecart } from '../sidecart/sidecart';
 import { SidenavService } from '../../../core/services/sidenav';
+import { SearchBar } from '../../components/search-bar/search-bar';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIcon, MatIconButton, RouterLink, RouterModule, Sidebar, Sidecart],
+  imports: [MatIcon, MatIconButton, RouterLink, RouterModule, Sidebar, Sidecart, SearchBar],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })

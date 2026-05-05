@@ -15,10 +15,7 @@
         <a class="header__link" [routerLink]="`/${APP_ROUTES.PRODUCTS.ROOT}`">Tienda</a>
       </nav>
       <div class="header__actions">
-        <label class="header__main-search">
-          <input class="header__search" type="search" />
-          <mat-icon fontIcon="search"></mat-icon>
-        </label>
+        <app-search-bar class="header__main-search" />
         <button matIconButton (click)="sidenav.toogleSideCart()">
           <mat-icon fontIcon="shopping_cart"></mat-icon>
         </button>

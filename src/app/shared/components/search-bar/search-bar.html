@@ -1,0 +1,28 @@
+<form [formGroup]="form">
+  <label class="search-bar">
+    <input class="search-bar__search" type="search" formControlName="search" />
+    <mat-icon fontIcon="search"></mat-icon>
+  </label>
+</form>
+<div class="list-prods">
+  @for (prod of products(); track $index) {
+    <div class="list-prods__card" [routerLink]="[APP_ROUTES.PRODUCTS.DETAIL.DETAIL_LINK(prod.id)]">
+      <img class="list-prods__card-img" [src]="prod.image" [alt]="prod.title" />
+      <div>
+        <span class="list-prods__card-title">{{ prod.title }}</span>
+      </div>
+    </div>
+  } @empty {
+    <p>No se encontraron productos</p>
+  }
+  @if (products().length >= 1) {
+    <div>
+      <a
+        class="list-prods__card-link"
+        [routerLink]="[APP_ROUTES.PRODUCTS.ROOT]"
+        [queryParams]="{ search: form.controls.search.value }"
+        >Explorar mas productos</a
+      >
+    </div>
+  }
+</div>

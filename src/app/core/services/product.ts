@@ -4,10 +4,12 @@ import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { IProduct } from '../../shared/interfaces/product.interface';
 export interface IFilterProduct {
-  categories: string[];
-  search: string;
-  min: number;
-  max: number;
+  categories?: string[];
+  search?: string;
+  min?: number;
+  max?: number;
+  page?: number;
+  pageSize?: number;
 }
 @Injectable({
   providedIn: 'root',
@@ -24,17 +26,27 @@ export class ProductService {
   }
 
   getFilteredProducts(filters: IFilterProduct): Observable<IProduct[]> {
-    const { categories, search, min, max } = filters;
+    const {
+      categories = [],
+      search = '',
+      min = 0,
+      max = Infinity,
+      page = 0,
+      pageSize = Infinity,
+    } = filters;
     const normalizedSearch = search.trim().toLowerCase();
     return this.http.get<IProduct[]>(`${this.urlDomain}products`).pipe(
-      map((product) =>
-        product.filter((p) => {
+      map((products) => {
+        const filtered = products.filter((p) => {
           const matchCategory = categories.length === 0 || categories.includes(p.category);
           const matchSearch = !normalizedSearch || p.title.toLowerCase().includes(normalizedSearch);
-          const matchPrice = p.price >= (min ?? 0) && p.price <= (max ?? Infinity);
+          const matchPrice = p.price >= min && p.price <= max;
           return matchCategory && matchSearch && matchPrice;
-        }),
-      ),
+        });
+        const start = (page - 1) * pageSize;
+        const end = pageSize === Infinity ? filtered.length : start + pageSize;
+        return filtered.slice(start, end);
+      }),
     );
   }
 

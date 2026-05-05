@@ -27,12 +27,7 @@ export class SearchBar {
       takeUntilDestroyed(),
       switchMap(({ search }) => {
         const value = search ? search : '';
-        return this._product.getFilteredProducts({
-          search: value,
-          categories: [],
-          min: 0,
-          max: 10000,
-        });
+        return this._product.getFilteredProducts({ search: value });
       }),
     ),
     { initialValue: [] },

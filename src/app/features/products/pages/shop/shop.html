@@ -38,13 +38,43 @@
           </form>
         </div>
       </aside>
-      <section class="shop__products">
-        @for (prod of products(); track $index) {
-          <app-card-product [product]="prod" />
-        } @empty {
-          <p>No hay prodcuctos disponibles</p>
-        }
-      </section>
+      <div class="shop__content">
+        <section class="shop__products">
+          @for (prod of products().products; track $index) {
+            <app-card-product [product]="prod" />
+          } @empty {
+            <p>No hay prodcuctos disponibles</p>
+          }
+        </section>
+        <div class="shop__pagination">
+          <button
+            class="shop__pagination-btn"
+            matMiniFab
+            (click)="page.set(page() - 1)"
+            [disabled]="page() === 1"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          @for (p of totalPages(); track p) {
+            <button
+              class="shop__pagination-btn"
+              matMiniFab
+              (click)="page.set(p)"
+              [class.active]="page() === p"
+            >
+              {{ p }}
+            </button>
+          }
+          <button
+            class="shop__pagination-btn"
+            matMiniFab
+            (click)="page.set(page() + 1)"
+            [disabled]="page() === totalPages().length"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </main>

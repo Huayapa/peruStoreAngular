@@ -5,7 +5,7 @@
   </label>
 </form>
 <div class="list-prods">
-  @for (prod of products(); track $index) {
+  @for (prod of products().products; track $index) {
     <div class="list-prods__card" [routerLink]="[APP_ROUTES.PRODUCTS.DETAIL.DETAIL_LINK(prod.id)]">
       <img class="list-prods__card-img" [src]="prod.image" [alt]="prod.title" />
       <div>
@@ -15,7 +15,7 @@
   } @empty {
     <p>No se encontraron productos</p>
   }
-  @if (products().length >= 1) {
+  @if (products().products.length >= 1) {
     <div>
       <a
         class="list-prods__card-link"

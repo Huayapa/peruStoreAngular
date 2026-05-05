@@ -11,6 +11,10 @@ export interface IFilterProduct {
   page?: number;
   pageSize?: number;
 }
+interface IFilteredResult {
+  products: IProduct[];
+  total: number;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -25,13 +29,13 @@ export class ProductService {
     return this.http.get<IProduct>(`${this.urlDomain}products/${id}`);
   }
 
-  getFilteredProducts(filters: IFilterProduct): Observable<IProduct[]> {
+  getFilteredProducts(filters: IFilterProduct): Observable<IFilteredResult> {
     const {
       categories = [],
       search = '',
       min = 0,
       max = Infinity,
-      page = 0,
+      page = 1,
       pageSize = Infinity,
     } = filters;
     const normalizedSearch = search.trim().toLowerCase();
@@ -45,7 +49,10 @@ export class ProductService {
         });
         const start = (page - 1) * pageSize;
         const end = pageSize === Infinity ? filtered.length : start + pageSize;
-        return filtered.slice(start, end);
+        return {
+          products: filtered.slice(start, end),
+          total: filtered.length,
+        };
       }),
     );
   }

@@ -6,7 +6,7 @@
     <app-categories />
   </div>
   <div class="homepage__container container">
-    <app-slider-products title="Productos Destacados" [products]="products()" />
+    <app-slider-products title="Productos Destacados" [products]="featuredProducts().products" />
   </div>
   <div class="homepage__container container">
     <div class="homepage__call-to-action">
@@ -18,6 +18,6 @@
     </div>
   </div>
   <div class="homepage__container container">
-    <app-slider-products title="Productos Nuevos" [products]="products()" />
+    <app-slider-products title="Productos Nuevos" [products]="newsProducts().products" />
   </div>
 </main>

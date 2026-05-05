@@ -27,9 +27,9 @@ export class SearchBar {
       takeUntilDestroyed(),
       switchMap(({ search }) => {
         const value = search ? search : '';
-        return this._product.getFilteredProducts({ search: value });
+        return this._product.getFilteredProducts({ search: value, pageSize: 2 });
       }),
     ),
-    { initialValue: [] },
+    { initialValue: { products: [], total: 0 } },
   );
 }

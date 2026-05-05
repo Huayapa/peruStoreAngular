@@ -35,5 +35,10 @@ export default class HomePage {
     { image: '/image/banner1.png' },
   ];
   private readonly _product = inject(ProductService);
-  products = toSignal(this._product.getProducts(), { initialValue: [] });
+  featuredProducts = toSignal(this._product.getFilteredProducts({ pageSize: 4, page: 2 }), {
+    initialValue: { products: [], total: 0 },
+  });
+  newsProducts = toSignal(this._product.getFilteredProducts({ pageSize: 8 }), {
+    initialValue: { products: [], total: 0 },
+  });
 }

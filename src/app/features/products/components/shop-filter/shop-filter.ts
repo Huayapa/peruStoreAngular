@@ -31,32 +31,8 @@ export class ShopFilter {
 
   constructor() {
     this.initValuesForm();
-    this._routeActive.queryParams
-      .pipe(
-        takeUntilDestroyed(),
-        map(
-          (params): IFilterProduct => ({
-            categories: params['category'] ? ([] as string[]).concat(params['category']) : [],
-            search: params['search'] ? String(params['search']) : '',
-            min: params['min'] ? Number(params['min']) : 0,
-            max: params['max'] ? Number(params['max']) : 10000,
-          }),
-        ),
-      )
-      .subscribe((data) => this.filterChange.emit(data));
-    this.form.valueChanges
-      .pipe(debounceTime(500), takeUntilDestroyed())
-      .subscribe(({ fcategory, fsearch, fmin, fmax }) => {
-        this._router.navigate([], {
-          queryParams: {
-            category: fcategory,
-            search: fsearch,
-            min: fmin,
-            max: fmax,
-          },
-          queryParamsHandling: 'merge',
-        });
-      });
+    this.listenQueryParams();
+    this.listenValueChangeForm();
   }
 
   onCategoryChange(category: string, checked: boolean) {
@@ -84,5 +60,35 @@ export class ShopFilter {
     if (params['search']) this.form.controls.fsearch.setValue(params['search'], opts);
     if (params['min']) this.form.controls.fmin.setValue(params['min'], opts);
     if (params['max']) this.form.controls.fmax.setValue(params['max'], opts);
+  }
+  private listenQueryParams(): void {
+    this._routeActive.queryParams
+      .pipe(
+        takeUntilDestroyed(),
+        map(
+          (params): IFilterProduct => ({
+            categories: params['category'] ? ([] as string[]).concat(params['category']) : [],
+            search: params['search'] ? String(params['search']) : '',
+            min: params['min'] ? Number(params['min']) : 0,
+            max: params['max'] ? Number(params['max']) : 10000,
+          }),
+        ),
+      )
+      .subscribe((data) => this.filterChange.emit(data));
+  }
+  private listenValueChangeForm(): void {
+    this.form.valueChanges
+      .pipe(debounceTime(500), takeUntilDestroyed())
+      .subscribe(({ fcategory, fsearch, fmin, fmax }) => {
+        this._router.navigate([], {
+          queryParams: {
+            category: fcategory,
+            search: fsearch,
+            min: fmin,
+            max: fmax,
+          },
+          queryParamsHandling: 'merge',
+        });
+      });
   }
 }

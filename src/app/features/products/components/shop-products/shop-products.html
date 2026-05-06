@@ -1,0 +1,7 @@
+<section class="products">
+  @for (prod of products(); track $index) {
+    <app-card-product [product]="prod" />
+  } @empty {
+    <p>No hay prodcuctos disponibles</p>
+  }
+</section>

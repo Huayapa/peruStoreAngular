@@ -1,0 +1,34 @@
+<div class="filters">
+  <h2 class="filters__title">Filtros</h2>
+  <form [formGroup]="form" class="filters__form">
+    <div class="filters__container">
+      <h3 class="filters__subtitle">Buscador</h3>
+      <label class="filters__main-search">
+        <input class="filters__search" type="search" formControlName="fsearch" />
+        <mat-icon fontIcon="search"></mat-icon>
+      </label>
+    </div>
+    <div>
+      <h3 class="filters__subtitle">Rango de Precio</h3>
+      <mat-slider class="filters_range" min="0" max="10000">
+        <input formControlName="fmin" matSliderStartThumb />
+        <input formControlName="fmax" matSliderEndThumb />
+      </mat-slider>
+    </div>
+    <div>
+      <h3 class="filters__subtitle">Categoria</h3>
+      <ul>
+        @for (category of categories(); track category; let i = $index) {
+          <li>
+            <mat-checkbox
+              (change)="onCategoryChange(category, $event.checked)"
+              [checked]="isCategoryChecked(category)"
+              [value]="category"
+              >{{ category }}</mat-checkbox
+            >
+          </li>
+        }
+      </ul>
+    </div>
+  </form>
+</div>

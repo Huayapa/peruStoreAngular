@@ -1,0 +1,18 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  &__btn {
+    border: 0;
+    background-color: var(--primary);
+    color: var(--text-secondary);
+    &:disabled {
+      background-color: var(--primary-80);
+      color: var(--text-secondary);
+    }
+    &.pagination__btn--active {
+      background-color: var(--primary-80);
+    }
+  }
+}

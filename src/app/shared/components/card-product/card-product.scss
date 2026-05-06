@@ -5,6 +5,7 @@
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border-primary);
   &__img {
     width: 100%;
     object-fit: contain;

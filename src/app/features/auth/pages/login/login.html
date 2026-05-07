@@ -1,44 +1,48 @@
 <main class="login">
   <section class="login__main">
     <h1 class="login__title">Iniciar Sesión</h1>
-    <form class="login__form" [formGroup]="form" (ngSubmit)="send()">
-      <mat-form-field appearance="outline" class="login__field">
-        <mat-label>Usuario</mat-label>
-        <input matInput formControlName="user" placeholder="Ingresa tu Usuario" />
-        <mat-icon matSuffix>person</mat-icon>
-        @if (form.controls.user.hasError('required')) {
-          <mat-error>El usuario es requerido</mat-error>
-        }
-      </mat-form-field>
+    @if (isLoading()) {
+      <mat-spinner></mat-spinner>
+    } @else {
+      <form class="login__form" [formGroup]="form" (ngSubmit)="send()">
+        <mat-form-field appearance="outline" class="login__field">
+          <mat-label>Usuario</mat-label>
+          <input matInput formControlName="user" placeholder="Ingresa tu Usuario" />
+          <mat-icon matSuffix>person</mat-icon>
+          @if (form.controls.user.hasError('required')) {
+            <mat-error>El usuario es requerido</mat-error>
+          }
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="login__field">
-        <mat-label>Contraseña</mat-label>
-        <input
-          matInput
-          formControlName="password"
-          [type]="hidePassword ? 'password' : 'text'"
-          placeholder="Ingresa tu contraseña"
-        />
-        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
-          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        <mat-form-field appearance="outline" class="login__field">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Ingresa tu contraseña"
+          />
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>La contraseña es requerida</mat-error>
+          }
+          @if (form.controls.password.hasError('minlength')) {
+            <mat-error>Debe ser mayor a 8 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <button matButton="filled">Ingresar</button>
+
+        <button
+          matButton="filled"
+          class="login__link"
+          [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.REGISTER.ROOT}`"
+        >
+          Crear cuenta
         </button>
-        @if (form.controls.password.hasError('required')) {
-          <mat-error>La contraseña es requerida</mat-error>
-        }
-        @if (form.controls.password.hasError('minlength')) {
-          <mat-error>Debe ser mayor a 8 caracteres</mat-error>
-        }
-      </mat-form-field>
-
-      <button matButton="filled">Ingresar</button>
-
-      <button
-        matButton="filled"
-        class="login__link"
-        [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.REGISTER.ROOT}`"
-      >
-        Crear cuenta
-      </button>
-    </form>
+      </form>
+    }
   </section>
 </main>

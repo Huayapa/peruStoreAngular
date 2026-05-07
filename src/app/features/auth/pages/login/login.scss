@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background-color: var(--primary-20);
+  background-color: var(--primary);
+  background-image: linear-gradient(var(--tertiary-80), var(--primary));
   &__title {
     font-size: clamp(1.4rem, 4vw, 1.6rem);
     line-height: 1.2;

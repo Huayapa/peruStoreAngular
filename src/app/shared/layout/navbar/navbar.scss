@@ -50,6 +50,11 @@
     align-items: center;
     gap: 1rem;
   }
+  &__cart-btn {
+    @media (max-width: 400px) {
+      display: none;
+    }
+  }
   &__link {
     position: relative;
     font-size: 1.2rem;
@@ -77,6 +82,9 @@
     &__main-search,
     &__span:last-child {
       display: none;
+    }
+    &__bar {
+      padding: 0;
     }
     &__btn {
       display: block;

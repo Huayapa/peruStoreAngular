@@ -1,1 +1,71 @@
-<p>register works!</p>
+<main class="register">
+  <section class="register__main">
+    <h1 class="register__title">Registrate</h1>
+    <form class="register__form" [formGroup]="form" (ngSubmit)="send()">
+      <mat-form-field appearance="outline" class="register__field">
+        <mat-label>Usuario</mat-label>
+        <input matInput formControlName="user" placeholder="Ingresa Usuario" />
+        <mat-icon matSuffix>person</mat-icon>
+        @if (form.controls.user.hasError('required')) {
+          <mat-error>El usuario es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="register__field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Ingresa un correo" />
+        <mat-icon matSuffix>mail</mat-icon>
+        @if (form.controls.email.hasError('required')) {
+          <mat-error>El correo es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="register__field">
+        <mat-label>Contraseña</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hidePassword ? 'password' : 'text'"
+          placeholder="Contraseña de la cuenta"
+        />
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.hasError('required')) {
+          <mat-error>La contraseña es requerida</mat-error>
+        }
+        @if (form.controls.password.hasError('minlength')) {
+          <mat-error>Debe ser mayor a 8 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <div
+        class="register__field-animated"
+        [class.register__field-animated--visible]="form.controls.password.valid"
+      >
+        <mat-form-field appearance="outline" class="register__field">
+          <mat-label>Repetir contraseña</mat-label>
+          <input
+            matInput
+            formControlName="repeatpassword"
+            placeholder="Ingresa la misma contraseña"
+          />
+          <mat-icon matSuffix>password</mat-icon>
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>La contraseña es requerida</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <button matButton="filled">Registrarte</button>
+
+      <button
+        matButton="filled"
+        class="register__link"
+        [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.LOGIN.ROOT}`"
+      >
+        ¿Ya tienes una cuenta? Iniciar Sesión
+      </button>
+    </form>
+  </section>
+</main>

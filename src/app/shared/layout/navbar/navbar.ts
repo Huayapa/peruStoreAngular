@@ -21,6 +21,6 @@ export class Navbar {
 
   @HostListener('window:scroll')
   onScroll(): void {
-    this.hideTop = window.scrollY > 0;
+    this.hideTop = window.scrollY > 200;
   }
 }

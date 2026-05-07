@@ -8,7 +8,7 @@
   @for (prod of products().products; track $index) {
     <div class="list-prods__card" [routerLink]="[APP_ROUTES.PRODUCTS.DETAIL.DETAIL_LINK(prod.id)]">
       <img class="list-prods__card-img" [src]="prod.image" [alt]="prod.title" />
-      <div>
+      <div class="list-prods__content">
         <span class="list-prods__card-title">{{ prod.title }}</span>
       </div>
     </div>

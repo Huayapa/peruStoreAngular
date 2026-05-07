@@ -2,9 +2,15 @@
   <button matIconButton class="sidebar__btn-close" (click)="sidenav.closeOverlay()">
     <mat-icon fontIcon="close" class="sidebar__icon"></mat-icon>
   </button>
+  <div class="sidebar__action">
+    <app-search-bar class="sidebar__search" />
+    <button class="sidebar__cart-btn" matIconButton (click)="sidenav.toogleSideCart()">
+      <mat-icon fontIcon="shopping_cart"></mat-icon>
+    </button>
+  </div>
   <nav class="sidebar__nav">
-    <a class="sidebar__link" [routerLink]="`/${APP_ROUTES.HOME}`">Inicio</a>
-    <a class="sidebar__link" [routerLink]="">Tienda</a>
+    <a class="sidebar__link" [routerLink]="`/${APP_ROUTES.HOME.ROOT}`">Inicio</a>
+    <a class="sidebar__link" [routerLink]="`/${APP_ROUTES.PRODUCTS.ROOT}`">Tienda</a>
   </nav>
   <p class="sidebar__descript">Disfruta de nuestras ofertas especiales en nuestra tienda.</p>
 </section>

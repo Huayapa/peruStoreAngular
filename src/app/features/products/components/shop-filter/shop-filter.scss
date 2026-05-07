@@ -28,6 +28,14 @@
   &__range {
     width: calc(100% - 1rem);
   }
+  &__range-value {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  &__range-text {
+    font-size: 1.2rem;
+  }
   &__form {
     padding: 1.4rem 0;
     display: flex;

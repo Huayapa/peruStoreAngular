@@ -6,11 +6,12 @@ import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, map } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { IFilterProduct } from '../../../../core/services/product';
+import { CurrencyPipe } from '@angular/common';
+import { IFilterProduct } from '../../../../core/interfaces/product.interface';
 
 @Component({
   selector: 'app-shop-filter',
-  imports: [MatIcon, MatSliderModule, ReactiveFormsModule, MatCheckbox],
+  imports: [MatIcon, MatSliderModule, ReactiveFormsModule, MatCheckbox, CurrencyPipe],
   templateUrl: './shop-filter.html',
   styleUrl: './shop-filter.scss',
 })
@@ -26,7 +27,7 @@ export class ShopFilter {
     fsearch: [''],
     fcategory: this._form.array<string>([]),
     fmin: [0],
-    fmax: [10000],
+    fmax: [5000],
   });
 
   constructor() {
@@ -70,7 +71,7 @@ export class ShopFilter {
             categories: params['category'] ? ([] as string[]).concat(params['category']) : [],
             search: params['search'] ? String(params['search']) : '',
             min: params['min'] ? Number(params['min']) : 0,
-            max: params['max'] ? Number(params['max']) : 10000,
+            max: params['max'] ? Number(params['max']) : 5000,
           }),
         ),
       )

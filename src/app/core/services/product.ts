@@ -3,18 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { IProduct } from '../../shared/interfaces/product.interface';
-export interface IFilterProduct {
-  categories?: string[];
-  search?: string;
-  min?: number;
-  max?: number;
-  page?: number;
-  pageSize?: number;
-}
-interface IFilteredResult {
-  products: IProduct[];
-  total: number;
-}
+import { IFilterProduct, IFilteredResult } from '../interfaces/product.interface';
+
 @Injectable({
   providedIn: 'root',
 })

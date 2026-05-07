@@ -10,10 +10,14 @@
     </div>
     <div>
       <h3 class="filters__subtitle">Rango de Precio</h3>
-      <mat-slider class="filters__range" min="0" max="10000">
+      <mat-slider class="filters__range" min="0" max="5000">
         <input formControlName="fmin" matSliderStartThumb />
         <input formControlName="fmax" matSliderEndThumb />
       </mat-slider>
+      <div class="filters__range-value">
+        <span class="filters__range-text">{{ form.get('fmin')?.value | currency }}</span>
+        <span class="filters__range-text">{{ form.get('fmax')?.value | currency }}</span>
+      </div>
     </div>
     <div>
       <h3 class="filters__subtitle">Categoria</h3>

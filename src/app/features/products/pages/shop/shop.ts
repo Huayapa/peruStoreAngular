@@ -5,9 +5,10 @@ import { MatSliderModule } from '@angular/material/slider';
 import { ShopFilter } from '../../components/shop-filter/shop-filter';
 import { ShopProducts } from '../../components/shop-products/shop-products';
 import { ShopPagination } from '../../components/shop-pagination/shop-pagination';
-import { IFilterProduct, ProductService } from '../../../../core/services/product';
+import { ProductService } from '../../../../core/services/product';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { IFilterProduct } from '../../../../core/interfaces/product.interface';
 
 @Component({
   selector: 'app-shop',

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, untracked } from '@angular/core';
 import { BannerSection } from '../../../home/components/banner-section/banner-section';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
@@ -55,5 +55,6 @@ export default class ShopPage {
 
   onFilterChange(params: IFilterProduct) {
     this.filterProduct.set(params);
+    untracked(() => this.page.set(1));
   }
 }

@@ -1,9 +1,9 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { debounceTime, map } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CurrencyPipe } from '@angular/common';
@@ -15,10 +15,11 @@ import { IFilterProduct } from '../../../../core/interfaces/product.interface';
   templateUrl: './shop-filter.html',
   styleUrl: './shop-filter.scss',
 })
-export class ShopFilter {
+export class ShopFilter implements OnInit {
   filterChange = output<IFilterProduct>();
   categories = input.required<string[]>();
 
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _routeActive = inject(ActivatedRoute);
   private readonly _router = inject(Router);
   private readonly _form = inject(FormBuilder);
@@ -32,8 +33,11 @@ export class ShopFilter {
 
   constructor() {
     this.initValuesForm();
-    this.listenQueryParams();
     this.listenValueChangeForm();
+  }
+
+  ngOnInit(): void {
+    this.listenQueryParams();
   }
 
   onCategoryChange(category: string, checked: boolean) {
@@ -65,15 +69,8 @@ export class ShopFilter {
   private listenQueryParams(): void {
     this._routeActive.queryParams
       .pipe(
-        takeUntilDestroyed(),
-        map(
-          (params): IFilterProduct => ({
-            categories: params['category'] ? ([] as string[]).concat(params['category']) : [],
-            search: params['search'] ? String(params['search']) : '',
-            min: params['min'] ? Number(params['min']) : 0,
-            max: params['max'] ? Number(params['max']) : 5000,
-          }),
-        ),
+        takeUntilDestroyed(this._destroyRef),
+        map((params): IFilterProduct => this.getFilterProduct(params)),
       )
       .subscribe((data) => this.filterChange.emit(data));
   }
@@ -91,5 +88,15 @@ export class ShopFilter {
           queryParamsHandling: 'merge',
         });
       });
+  }
+
+  private getFilterProduct(params: Params): IFilterProduct {
+    const filter: IFilterProduct = {
+      categories: params['category'] ? ([] as string[]).concat(params['category']) : [],
+      search: params['search'] ? String(params['search']) : '',
+      min: params['min'] ? Number(params['min']) : 0,
+      max: params['max'] ? Number(params['max']) : 5000,
+    };
+    return filter;
   }
 }

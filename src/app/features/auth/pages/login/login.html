@@ -4,7 +4,7 @@
     @if (isLoading()) {
       <mat-spinner></mat-spinner>
     } @else {
-      <form class="login__form" [formGroup]="form" (ngSubmit)="send()">
+      <form class="login__form" [formGroup]="form">
         <mat-form-field appearance="outline" class="login__field">
           <mat-label>Usuario</mat-label>
           <input matInput formControlName="username" placeholder="Ingresa tu Usuario" />
@@ -33,7 +33,7 @@
           }
         </mat-form-field>
 
-        <button matButton="filled">Ingresar</button>
+        <button matButton="filled" (click)="send($event)">Ingresar</button>
 
         <button
           matButton="filled"

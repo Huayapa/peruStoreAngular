@@ -51,7 +51,8 @@ export default class LoginPage {
     });
   }
 
-  send() {
+  send(e: Event) {
+    e.preventDefault();
     if (this.form.invalid) return this.form.markAllAsTouched();
     this.isLoading.set(true);
     this._auth.login(this.form.getRawValue()).subscribe({

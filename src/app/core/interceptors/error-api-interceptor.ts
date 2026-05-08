@@ -1,10 +1,18 @@
-import { HttpErrorResponse, HttpInterceptorFn, HttpStatusCode } from '@angular/common/http';
+import {
+  HttpContextToken,
+  HttpErrorResponse,
+  HttpInterceptorFn,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
 
+export const HANDLE_HTTP_INTERCEPTOR = new HttpContextToken<boolean>(() => false);
+
 export const errorApiInterceptor: HttpInterceptorFn = (req, next) => {
-  const _snackBar = inject(MatSnackBar);
+  const snackBar = inject(MatSnackBar);
+  if (!req.context.get(HANDLE_HTTP_INTERCEPTOR)) return next(req);
   const opts: MatSnackBarConfig = {
     horizontalPosition: 'right',
     verticalPosition: 'top',
@@ -14,11 +22,7 @@ export const errorApiInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
-      _snackBar.open(
-        messageStatus[err.status] ?? 'Ha ocurrido un error inesperado',
-        'Cerrar',
-        opts,
-      );
+      snackBar.open(messageStatus[err.status] ?? 'Ha ocurrido un error inesperado', 'Cerrar', opts);
       return throwError(() => err);
     }),
   );

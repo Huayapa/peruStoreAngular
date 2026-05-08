@@ -7,9 +7,9 @@
       <form class="login__form" [formGroup]="form" (ngSubmit)="send()">
         <mat-form-field appearance="outline" class="login__field">
           <mat-label>Usuario</mat-label>
-          <input matInput formControlName="user" placeholder="Ingresa tu Usuario" />
+          <input matInput formControlName="username" placeholder="Ingresa tu Usuario" />
           <mat-icon matSuffix>person</mat-icon>
-          @if (form.controls.user.hasError('required')) {
+          @if (form.controls.username.hasError('required')) {
             <mat-error>El usuario es requerido</mat-error>
           }
         </mat-form-field>

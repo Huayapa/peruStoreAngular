@@ -1,2 +1,17 @@
 @import url('_reset.scss');
 @import url('_styles.scss');
+
+.error-snackbar .mdc-snackbar__surface {
+  background-color: #701f1f !important;
+  color: #fff !important;
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+}
+.success-snackbar .mdc-snackbar__surface {
+  background-color: #1f4621 !important;
+  color: #fff !important;
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+}

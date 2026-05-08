@@ -47,6 +47,7 @@ export default class LoginPage {
       horizontalPosition: 'right',
       verticalPosition: 'top',
       duration: 3000,
+      panelClass: 'success-snackbar',
     });
   }
 

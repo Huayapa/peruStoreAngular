@@ -1,7 +1,12 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { IAuthStorage, ILoginRequest } from '../interfaces/auth.interfaces';
+import {
+  IAuthStorage,
+  IAuthRequest,
+  IRegisterRequest,
+  IRegisterResponse,
+} from '../interfaces/auth.interfaces';
 import { Observable, tap } from 'rxjs';
 import { HANDLE_HTTP_INTERCEPTOR } from '../interceptors/error-api-interceptor';
 
@@ -14,7 +19,7 @@ export class AuthService {
   private readonly tokenstorage = 'auth_data';
   private readonly opts = { context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true) };
 
-  saveAuthData(token: string, user: ILoginRequest): void {
+  saveAuthData(token: string, user: IAuthRequest): void {
     localStorage.setItem(this.tokenstorage, JSON.stringify({ token, user }));
   }
 
@@ -26,9 +31,13 @@ export class AuthService {
     localStorage.removeItem(this.tokenstorage);
   }
 
-  login(user: ILoginRequest): Observable<{ token: string }> {
+  login(user: IAuthRequest): Observable<{ token: string }> {
     return this.http
       .post<{ token: string }>(`${this.apiurl}auth/login`, user, this.opts)
       .pipe(tap((value) => this.saveAuthData(value.token, user)));
+  }
+
+  register(newuser: IRegisterRequest): Observable<IRegisterResponse> {
+    return this.http.post<IRegisterResponse>(`${this.apiurl}users`, newuser);
   }
 }

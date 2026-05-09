@@ -1,11 +1,19 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconButton, MatAnchor } from '@angular/material/button';
 import { MatFormField, MatLabel, MatSuffix, MatError } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../../../core/services/auth';
+import { IRegisterRequest } from '../../../../core/interfaces/auth.interfaces';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  crossPasswordCustomValidation,
+  PasswordStateMatcher,
+} from '../../validators/cross-password.validator';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +27,7 @@ import { APP_ROUTES } from '../../../../core/constants/app-routes';
     MatAnchor,
     RouterLink,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
     MatError,
   ],
   templateUrl: './register.html',
@@ -26,17 +35,50 @@ import { APP_ROUTES } from '../../../../core/constants/app-routes';
 })
 export default class RegisterPage {
   private readonly _fbNon = inject(NonNullableFormBuilder);
+  private readonly _snackBar = inject(MatSnackBar);
+  private readonly _auth = inject(AuthService);
+  private readonly _router = inject(Router);
   readonly APP_ROUTES = APP_ROUTES;
+  readonly isLoading = signal(false);
+  matcher = new PasswordStateMatcher();
   hidePassword = true;
-  form = this._fbNon.group({
-    user: ['', [Validators.required]],
-    email: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    repeatpassword: ['', [Validators.required, Validators.minLength(8)]],
-  });
 
-  send() {
-    if (this.form.invalid) return;
-    console.log(this.form.invalid);
+  form = this._fbNon.group(
+    {
+      username: ['prueba1', [Validators.required]],
+      email: ['prueba@gmail.com', [Validators.required, Validators.email]],
+      password: ['12345678', [Validators.required, Validators.minLength(4)]],
+      repeatpassword: ['12345678', [Validators.required, Validators.minLength(4)]],
+    },
+    { validators: crossPasswordCustomValidation },
+  );
+
+  openSnackBar() {
+    this._snackBar.open(`Registrado Exitosamente:`, 'Cerrar', {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      duration: 3000,
+      panelClass: 'success-snackbar',
+    });
+  }
+
+  send(e: Event) {
+    e.stopPropagation();
+    if (this.form.invalid) return this.form.markAllAsTouched();
+    this.isLoading.set(true);
+    const newuser: IRegisterRequest = {
+      username: this.form.get('username')!.value,
+      email: this.form.get('email')!.value,
+      password: this.form.get('password')!.value,
+    };
+    this._auth.register(newuser).subscribe({
+      next: () => {
+        this.form.reset();
+        this.isLoading.set(false);
+        this.openSnackBar();
+        this._router.navigate([APP_ROUTES.AUTH.ROOT, APP_ROUTES.AUTH.LOGIN.ROOT]);
+      },
+      error: () => this.isLoading.set(false),
+    });
   }
 }

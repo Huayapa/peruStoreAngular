@@ -38,7 +38,7 @@ export default class LoginPage extends FormDeactivateAbstract {
   readonly isLoading = signal(false);
   hidePassword = true;
 
-  form = this._fbNon.group({
+  readonly form = this._fbNon.group({
     username: ['mor_2314', [Validators.required]],
     password: ['83r5^_', [Validators.required, Validators.minLength(4)]],
   });

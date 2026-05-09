@@ -67,11 +67,8 @@ export default class RegisterPage extends FormDeactivateAbstract {
     e.stopPropagation();
     if (this.form.invalid) return this.form.markAllAsTouched();
     this.isLoading.set(true);
-    const newuser: IRegisterRequest = {
-      username: this.form.get('username')!.value,
-      email: this.form.get('email')!.value,
-      password: this.form.get('password')!.value,
-    };
+    const { username, email, password } = this.form.getRawValue();
+    const newuser: IRegisterRequest = { username, email, password };
     this._auth.register(newuser).subscribe({
       next: () => {
         this.allowNavigation = true;

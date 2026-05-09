@@ -9,6 +9,7 @@ import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { AuthService } from '../../../../core/services/auth';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export default class LoginPage {
+export default class LoginPage extends FormDeactivateAbstract {
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _fbNon = inject(NonNullableFormBuilder);
   private readonly _auth = inject(AuthService);
@@ -57,6 +58,7 @@ export default class LoginPage {
     this.isLoading.set(true);
     this._auth.login(this.form.getRawValue()).subscribe({
       next: () => {
+        this.allowNavigation = true;
         this.form.reset();
         this.isLoading.set(false);
         this.openSnackBar();

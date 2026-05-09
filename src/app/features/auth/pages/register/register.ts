@@ -14,6 +14,7 @@ import {
   crossPasswordCustomValidation,
   PasswordStateMatcher,
 } from '../../validators/cross-password.validator';
+import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 
 @Component({
   selector: 'app-register',
@@ -33,17 +34,17 @@ import {
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export default class RegisterPage {
+export default class RegisterPage extends FormDeactivateAbstract {
   private readonly _fbNon = inject(NonNullableFormBuilder);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _auth = inject(AuthService);
   private readonly _router = inject(Router);
   readonly APP_ROUTES = APP_ROUTES;
   readonly isLoading = signal(false);
-  matcher = new PasswordStateMatcher();
+  readonly matcher = new PasswordStateMatcher();
   hidePassword = true;
 
-  form = this._fbNon.group(
+  readonly form = this._fbNon.group(
     {
       username: ['prueba1', [Validators.required]],
       email: ['prueba@gmail.com', [Validators.required, Validators.email]],
@@ -73,6 +74,7 @@ export default class RegisterPage {
     };
     this._auth.register(newuser).subscribe({
       next: () => {
+        this.allowNavigation = true;
         this.form.reset();
         this.isLoading.set(false);
         this.openSnackBar();

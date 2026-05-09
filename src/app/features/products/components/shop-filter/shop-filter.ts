@@ -32,7 +32,7 @@ export class ShopFilter implements OnInit {
   });
 
   constructor() {
-    this.initValuesForm();
+    this.changeValuesForm();
     this.listenValueChangeForm();
   }
 
@@ -54,7 +54,7 @@ export class ShopFilter implements OnInit {
     return this.form.controls.fcategory.controls.some((c) => c.value === category);
   }
 
-  private initValuesForm() {
+  private changeValuesForm() {
     const params = this._routeActive.snapshot.queryParams;
     const opts = { emitEvent: false };
     if (params['category']) {
@@ -72,7 +72,10 @@ export class ShopFilter implements OnInit {
         takeUntilDestroyed(this._destroyRef),
         map((params): IFilterProduct => this.getFilterProduct(params)),
       )
-      .subscribe((data) => this.filterChange.emit(data));
+      .subscribe((data) => {
+        this.changeValuesForm();
+        this.filterChange.emit(data);
+      });
   }
   private listenValueChangeForm(): void {
     this.form.valueChanges

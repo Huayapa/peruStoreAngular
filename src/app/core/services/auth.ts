@@ -1,6 +1,7 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 import {
   IAuthStorage,
   IAuthRequest,
@@ -19,8 +20,14 @@ export class AuthService {
   private readonly tokenstorage = 'auth_data';
   private readonly opts = { context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true) };
 
-  saveAuthData(token: string, user: IAuthRequest): void {
-    localStorage.setItem(this.tokenstorage, JSON.stringify({ token, user }));
+  saveAuthData(token: string): void {
+    localStorage.setItem(this.tokenstorage, JSON.stringify({ token }));
+  }
+
+  getUserId(): number {
+    const token = localStorage.getItem(this.tokenstorage);
+    if (!token) return 0;
+    return jwtDecode<{ sub: number }>(token).sub;
   }
 
   getAuthData(): IAuthStorage | null {
@@ -34,7 +41,7 @@ export class AuthService {
   login(user: IAuthRequest): Observable<{ token: string }> {
     return this.http
       .post<{ token: string }>(`${this.apiurl}auth/login`, user, this.opts)
-      .pipe(tap((value) => this.saveAuthData(value.token, user)));
+      .pipe(tap((value) => this.saveAuthData(value.token)));
   }
 
   register(newuser: IRegisterRequest): Observable<IRegisterResponse> {

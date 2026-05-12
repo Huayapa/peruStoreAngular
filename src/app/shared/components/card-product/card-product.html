@@ -6,6 +6,9 @@
   <img class="card-prod__img" mat-card-image [src]="product().image" [alt]="product().title" />
   <mat-card-header class="card-prod__header">
     <mat-card-title class="card-prod__title">{{ product().title }}</mat-card-title>
+    <mat-card-subtitle class="card-prod__subtitle">{{
+      product().price | currency
+    }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-actions>
     <button class="card-prod__add-cart" matFab extended (click)="addToCart($event)">

@@ -22,6 +22,9 @@ export class CartProductsService {
   readonly totalPrice$ = this._cart$.pipe(
     map((cart) => cart.products.reduce((acc, prod) => acc + prod.quantity * prod.product.price, 0)),
   );
+  readonly totalItem$ = this._cart$.pipe(
+    map((cart) => cart.products.reduce((acc, prod) => acc + prod.quantity, 0)),
+  );
 
   constructor() {
     this._cart$.subscribe((cart) => this.updateCartStorage(cart));

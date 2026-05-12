@@ -16,7 +16,12 @@
       </nav>
       <div class="header__actions">
         <app-search-bar class="header__main-search" />
-        <button class="header__cart-btn" matIconButton (click)="sidenav.toogleSideCart()">
+        <button
+          class="header__cart-btn"
+          matIconButton
+          [matBadge]="totalItem()"
+          (click)="sidenav.toogleSideCart()"
+        >
           <mat-icon fontIcon="shopping_cart"></mat-icon>
         </button>
         <button
@@ -26,7 +31,7 @@
           <mat-icon fontIcon="login"></mat-icon>
         </button>
         <button matIconButton class="header__btn" (click)="sidenav.toogleSideBar()">
-          <mat-icon fontIcon="menu"></mat-icon>
+          <mat-icon fontIcon="menu"></mat-icon> sa
         </button>
       </div>
     </div>

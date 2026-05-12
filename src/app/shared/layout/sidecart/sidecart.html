@@ -11,6 +11,7 @@
           <div class="card__info">
             <h4 class="card__title">{{ prod.product.title }}</h4>
             <span class="card__stock">Cantidad: {{ prod.quantity }}</span>
+            <span class="card__price">{{ prod.product.price | currency }}</span>
           </div>
           <button
             matIconButton
@@ -24,7 +25,7 @@
     </div>
     <div class="sidecart__detail">
       <span class="sidecart__subtitle">Total</span>
-      <span class="sidecart__total">0</span>
+      <span class="sidecart__total">{{ totalProduct() | currency }}</span>
     </div>
     <button matButton="filled">Ver Checkout</button>
   </article>

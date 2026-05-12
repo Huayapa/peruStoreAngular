@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { ICartProduct } from '../interfaces/cart.interfaces';
 import { ProductService } from './product';
 import { IProduct } from '../../shared/interfaces/product.interface';
@@ -17,7 +17,11 @@ export class CartProductsService {
   private readonly _auth = inject(AuthService);
   private readonly cartstorage = 'cart_store';
   private readonly _cart$ = new BehaviorSubject<ICartProduct>(this.getCartStorage());
+
   readonly cartproduct$ = this._cart$.asObservable();
+  readonly totalPrice$ = this._cart$.pipe(
+    map((cart) => cart.products.reduce((acc, prod) => acc + prod.quantity * prod.product.price, 0)),
+  );
 
   constructor() {
     this._cart$.subscribe((cart) => this.updateCartStorage(cart));

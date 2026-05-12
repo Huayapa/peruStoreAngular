@@ -15,5 +15,4 @@ export interface IRegisterResponse {
 
 export interface IAuthStorage {
   token: string;
-  user: IAuthRequest;
 }

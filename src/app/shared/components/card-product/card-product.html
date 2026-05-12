@@ -8,7 +8,7 @@
     <mat-card-title class="card-prod__title">{{ product().title }}</mat-card-title>
   </mat-card-header>
   <mat-card-actions>
-    <button class="card-prod__add-cart" matFab extended>
+    <button class="card-prod__add-cart" matFab extended (click)="addToCart($event)">
       <mat-icon>shopping_bag</mat-icon>
       Agregar al carrito
     </button>

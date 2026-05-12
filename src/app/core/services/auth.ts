@@ -17,10 +17,10 @@ import { HANDLE_HTTP_INTERCEPTOR } from '../interceptors/error-api-interceptor';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly apiurl = environment.apiUrl;
-  private readonly tokenstorage = 'auth_data';
+  private readonly tokenstorage = 'auth_store';
   private readonly opts = { context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true) };
 
-  saveAuthData(token: string): void {
+  saveToken(token: string): void {
     localStorage.setItem(this.tokenstorage, JSON.stringify({ token }));
   }
 
@@ -30,18 +30,19 @@ export class AuthService {
     return jwtDecode<{ sub: number }>(token).sub;
   }
 
-  getAuthData(): IAuthStorage | null {
+  getToken(): IAuthStorage | null {
     const data = localStorage.getItem(this.tokenstorage);
     return data ? JSON.parse(data) : null;
   }
-  removeAuthData() {
+
+  removeToken() {
     localStorage.removeItem(this.tokenstorage);
   }
 
   login(user: IAuthRequest): Observable<{ token: string }> {
     return this.http
       .post<{ token: string }>(`${this.apiurl}auth/login`, user, this.opts)
-      .pipe(tap((value) => this.saveAuthData(value.token)));
+      .pipe(tap((value) => this.saveToken(value.token)));
   }
 
   register(newuser: IRegisterRequest): Observable<IRegisterResponse> {

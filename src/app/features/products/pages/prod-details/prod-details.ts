@@ -9,6 +9,7 @@ import { SliderProducts } from '../../../../shared/components/slider-products/sl
 import { CurrencyPipe } from '@angular/common';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { CartProductsService } from '../../../../core/services/cart-products';
 
 @Component({
   selector: 'app-prod-details',
@@ -18,6 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 })
 export default class ProdDetailsPage {
   private readonly _ActivatedRouter = inject(ActivatedRoute);
+  private readonly _cartProduct = inject(CartProductsService);
   private readonly _router = inject(Router);
   private readonly _product = inject(ProductService);
   readonly APP_ROUTES = APP_ROUTES;
@@ -43,6 +45,7 @@ export default class ProdDetailsPage {
     ),
     { initialValue: null },
   );
+
   products = toSignal(
     toObservable(this.category).pipe(
       filter((categories) => categories.length > 0),
@@ -50,4 +53,11 @@ export default class ProdDetailsPage {
     ),
     { initialValue: { products: [], total: 0 } },
   );
+
+  addToCart(e: Event) {
+    e.stopPropagation();
+    const product = this.product();
+    if (!product) return;
+    this._cartProduct.addProductToCart(product);
+  }
 }

@@ -8,7 +8,7 @@
           <span class="prod-detail__category">{{ product()?.category }}</span>
           <p class="prod-detail__descript">{{ product()?.description }}</p>
           <strong class="prod-detail__price">{{ product()?.price | currency: 'USD' }}</strong>
-          <button class="prod-detail__btn" matFab extended>
+          <button class="prod-detail__btn" matFab extended (click)="addToCart($event)">
             <mat-icon>shopping_cart</mat-icon>
             Añadir al carrito
           </button>

@@ -2,5 +2,30 @@
   <button matIconButton class="sidecart__btn-close" (click)="sidenav.closeOverlay()">
     <mat-icon fontIcon="close" class="sidecart__icon"></mat-icon>
   </button>
-  <h3>Carrito de Compras</h3>
+  <article class="sidecart__main">
+    <h3 class="sidecart__title">Carrito de Compras</h3>
+    <div class="sidecart__list">
+      @for (prod of cartProduct()?.products; track prod.product.id) {
+        <div class="card" [routerLink]="APP_ROUTES.PRODUCTS.DETAIL.DETAIL_LINK(prod.product.id)">
+          <img class="card__img" [src]="prod.product.image" [alt]="prod.product.title" />
+          <div class="card__info">
+            <h4 class="card__title">{{ prod.product.title }}</h4>
+            <span class="card__stock">Cantidad: {{ prod.quantity }}</span>
+          </div>
+          <button
+            matIconButton
+            class="card__btn-close"
+            (click)="removeProductToCart($event, prod.product)"
+          >
+            <mat-icon fontIcon="close" class="card__btn-icon"></mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+    <div class="sidecart__detail">
+      <span class="sidecart__subtitle">Total</span>
+      <span class="sidecart__total">0</span>
+    </div>
+    <button matButton="filled">Ver Checkout</button>
+  </article>
 </section>

@@ -10,7 +10,7 @@ import { catchError, throwError } from 'rxjs';
 
 export const HANDLE_HTTP_INTERCEPTOR = new HttpContextToken<boolean>(() => false);
 
-export const errorApiInterceptor: HttpInterceptorFn = (req, next) => {
+export const errorApiInterceptorFn: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
   if (!req.context.get(HANDLE_HTTP_INTERCEPTOR)) return next(req);
   const opts: MatSnackBarConfig = {

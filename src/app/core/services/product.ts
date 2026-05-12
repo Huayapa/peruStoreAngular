@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { IProduct } from '../../shared/interfaces/product.interface';
 import { IFilterProduct, IFilteredResult } from '../interfaces/product.interface';
+import { SKIP_AUTH } from '../interceptors/auth-interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +12,13 @@ import { IFilterProduct, IFilteredResult } from '../interfaces/product.interface
 export class ProductService {
   private readonly urlDomain = environment.apiUrl;
   private readonly http = inject(HttpClient);
+  private readonly opts = { context: new HttpContext().set(SKIP_AUTH, true) };
   getProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(`${this.urlDomain}products`);
+    return this.http.get<IProduct[]>(`${this.urlDomain}products`, this.opts);
   }
 
   getProductId(id: number): Observable<IProduct> {
-    return this.http.get<IProduct>(`${this.urlDomain}products/${id}`);
+    return this.http.get<IProduct>(`${this.urlDomain}products/${id}`, this.opts);
   }
 
   getFilteredProducts(filters: IFilterProduct): Observable<IFilteredResult> {
@@ -29,7 +31,7 @@ export class ProductService {
       pageSize = Infinity,
     } = filters;
     const normalizedSearch = search.trim().toLowerCase();
-    return this.http.get<IProduct[]>(`${this.urlDomain}products`).pipe(
+    return this.http.get<IProduct[]>(`${this.urlDomain}products`, this.opts).pipe(
       map((products) => {
         const filtered = products.filter((p) => {
           const matchCategory = categories.length === 0 || categories.includes(p.category);
@@ -49,7 +51,7 @@ export class ProductService {
 
   getCategory(): Observable<string[]> {
     return this.http
-      .get<IProduct[]>(`${this.urlDomain}/products`)
+      .get<IProduct[]>(`${this.urlDomain}products`, this.opts)
       .pipe(map((prods) => [...new Set(prods.map((prod) => prod.category))]));
   }
 }

@@ -10,6 +10,7 @@ import {
 } from '../interfaces/auth.interfaces';
 import { Observable, tap } from 'rxjs';
 import { HANDLE_HTTP_INTERCEPTOR } from '../interceptors/error-api-interceptor';
+import { SKIP_AUTH } from '../interceptors/auth-interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,9 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly apiurl = environment.apiUrl;
   private readonly tokenstorage = 'auth_store';
-  private readonly opts = { context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true) };
+  private readonly opts = {
+    context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true).set(SKIP_AUTH, true),
+  };
 
   saveToken(token: string): void {
     localStorage.setItem(this.tokenstorage, JSON.stringify({ token }));

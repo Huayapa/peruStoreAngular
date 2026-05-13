@@ -1,20 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { AuthService } from './auth';
-import { BehaviorSubject, map } from 'rxjs';
-import { ICartProduct } from '../interfaces/cart.interfaces';
-import { ProductService } from './product';
+import { BehaviorSubject, filter, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { ICartItems, ICartProduct, ICartResponse } from '../interfaces/cart.interfaces';
 import { IProduct } from '../../shared/interfaces/product.interface';
+import { CartApiService } from './cart-api';
+import { CartAdapter } from '../adapters/cart.adapter';
+import { ProductService } from './product';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartProductsService {
   private readonly _product = inject(ProductService);
-  private readonly _http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl;
   private readonly _auth = inject(AuthService);
+  private readonly _cartapi = inject(CartApiService);
   private readonly cartstorage = 'cart_store';
   private readonly _cart$ = new BehaviorSubject<ICartProduct>(this.getCartStorage());
 
@@ -59,7 +58,7 @@ export class CartProductsService {
     return this._cart$.next(cart);
   }
 
-  private getCartStorage() {
+  getCartStorage() {
     const cart = localStorage.getItem(this.cartstorage);
     return cart ? (JSON.parse(cart) as ICartProduct) : this.createEmptyCart();
   }
@@ -74,5 +73,36 @@ export class CartProductsService {
       userId: this._auth.getUserId() ?? 0,
       products: [],
     };
+  }
+
+  loadUserCart(): void {
+    const userId = this._auth.getUserId();
+
+    if (!userId || userId === 0) return;
+
+    this._cartapi
+      .getCart(userId)
+      .pipe(
+        filter((cart) => !!cart),
+        switchMap((cart) => this.resolverCartProducts(cart)),
+        filter((cartProduct) => !!cartProduct),
+      )
+      .subscribe((cartProduct) => {
+        this._cart$.next(cartProduct);
+      });
+  }
+
+  private resolverCartProducts(cart: ICartResponse): Observable<ICartProduct | null> {
+    if (!cart.products.length) {
+      return of(CartAdapter.fromAPI(cart, []));
+    }
+
+    const requests = cart.products.map((item) =>
+      this._product
+        .getProductId(item.productId)
+        .pipe(map((prod) => ({ product: prod, quantity: item.quantity }) as ICartItems)),
+    );
+
+    return forkJoin(requests).pipe(map((products) => CartAdapter.fromAPI(cart, products)));
   }
 }

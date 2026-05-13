@@ -10,6 +10,9 @@ import { AuthService } from '../../../../core/services/auth';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
+import { CartProductsService } from '../../../../core/services/cart-products';
+import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -30,10 +33,12 @@ import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deacti
   styleUrl: './login.scss',
 })
 export default class LoginPage extends FormDeactivateAbstract {
+  private readonly _cartProduct = inject(CartProductsService);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _fbNon = inject(NonNullableFormBuilder);
   private readonly _auth = inject(AuthService);
   private readonly _router = inject(Router);
+
   readonly APP_ROUTES = APP_ROUTES;
   readonly isLoading = signal(false);
   hidePassword = true;
@@ -43,28 +48,52 @@ export default class LoginPage extends FormDeactivateAbstract {
     password: ['83r5^_', [Validators.required, Validators.minLength(4)]],
   });
 
-  openSnackBar() {
+  send(e: Event): void {
+    e.preventDefault();
+    if (this.form.invalid) return this.form.markAllAsTouched();
+    this.isLoading.set(true);
+    this._auth
+      .login(this.form.getRawValue())
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe(() => this.handleLoginSuccess());
+  }
+
+  private handleLoginSuccess() {
+    const cart = this._cartProduct.getCartStorage();
+    if (cart.products.length) {
+      this.showReplaceCartDialog();
+    } else {
+      this.completeLoginProcess(true);
+    }
+  }
+
+  private showReplaceCartDialog() {
+    const dialog = this._dialog.open(ConfirmDialog, {
+      width: '350px',
+      data: {
+        title: '¿Reemplazar carrito?',
+        message: '¿Deseas reemplazar tu carrito actual con el de tu cuenta?',
+      },
+    });
+    dialog.afterClosed().subscribe((confirmed) => this.completeLoginProcess(confirmed));
+  }
+
+  private completeLoginProcess(loadCartLogin: boolean) {
+    if (loadCartLogin) {
+      this._cartProduct.loadUserCart();
+    }
+    this.allowNavigation = true;
+    this.form.reset();
+    this.openSnackBar();
+    this._router.navigate([APP_ROUTES.HOME.ROOT]);
+  }
+
+  private openSnackBar() {
     this._snackBar.open('Sesión iniciada con exito', 'Cerrar', {
       horizontalPosition: 'right',
       verticalPosition: 'top',
       duration: 3000,
       panelClass: 'success-snackbar',
-    });
-  }
-
-  send(e: Event) {
-    e.preventDefault();
-    if (this.form.invalid) return this.form.markAllAsTouched();
-    this.isLoading.set(true);
-    this._auth.login(this.form.getRawValue()).subscribe({
-      next: () => {
-        this.allowNavigation = true;
-        this.form.reset();
-        this.isLoading.set(false);
-        this.openSnackBar();
-        this._router.navigate([APP_ROUTES.HOME.ROOT]);
-      },
-      error: () => this.isLoading.set(false),
     });
   }
 }

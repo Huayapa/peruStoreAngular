@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
 
 @Directive()
 export abstract class FormDeactivateAbstract implements CanComponentDeactivate {
-  private readonly _dialog = inject(MatDialog);
+  readonly _dialog = inject(MatDialog);
   abstract form: FormGroup;
   protected allowNavigation = false;
 
@@ -25,6 +25,10 @@ export abstract class FormDeactivateAbstract implements CanComponentDeactivate {
         width: '350px',
         enterAnimationDuration: '100ms',
         exitAnimationDuration: '100ms',
+        data: {
+          title: 'Los datos se perderan',
+          message: '¿Seguro que deseas salir? Los cambios que implemento se perderán.',
+        },
       });
       return dialog.afterClosed();
     }

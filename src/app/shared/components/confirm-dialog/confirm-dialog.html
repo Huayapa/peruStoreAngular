@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Los datos se perderan</h2>
+<h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
-  ¿Seguro que deseas salir? Los cambios que implemento se perderán.
+  {{ data.message }}
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button matButton (click)="onCancel()">No</button>
-  <button matButton cdkFocusInitial (click)="onConfirm()">Si</button>
+  <button matButton (click)="onCancel()">{{ data.cancelText ?? 'No' }}</button>
+  <button matButton cdkFocusInitial (click)="onConfirm()">{{ data.confirmText ?? 'Si' }}</button>
 </mat-dialog-actions>

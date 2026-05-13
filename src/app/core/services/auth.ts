@@ -38,6 +38,10 @@ export class AuthService {
     return data ? JSON.parse(data) : null;
   }
 
+  isLoggedIn(): boolean {
+    return this.getToken() !== null;
+  }
+
   removeToken() {
     localStorage.removeItem(this.tokenstorage);
   }

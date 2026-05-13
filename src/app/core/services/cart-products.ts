@@ -32,30 +32,47 @@ export class CartProductsService {
   addProductToCart(prod: IProduct) {
     const cart = this.getCartStorage();
     const index = cart.products.findIndex((item) => item.product.id === prod.id);
-    if (index === -1) {
-      cart?.products.push({ product: prod, quantity: 1 });
-    } else {
-      cart.products[index] = {
-        ...cart.products[index],
-        quantity: cart.products[index].quantity + 1,
-      };
-    }
-    return this._cart$.next(cart);
+
+    const updateCart =
+      index === -1
+        ? { ...cart, products: [...cart.products, { product: prod, quantity: 1 }] }
+        : {
+            ...cart,
+            products: cart.products.map((item, i) =>
+              i === index ? { ...item, quantity: item.quantity + 1 } : item,
+            ),
+          };
+
+    this._cart$.next(updateCart);
+    if (!this._auth.isLoggedIn()) return;
+    const apiCart = CartAdapter.toAPI(updateCart);
+    const request$ =
+      updateCart.id === 0 ? this._cartapi.addNewCart(apiCart) : this._cartapi.updateCart(apiCart);
+
+    request$.subscribe();
   }
 
   updateStock(productId: number, newQuantity: number) {
     if (newQuantity < 1) return;
     const cart = this.getCartStorage();
-    cart.products = cart.products.map((item) =>
-      item.product.id === productId ? { ...item, quantity: newQuantity } : item,
-    );
-    this._cart$.next(cart);
+    const updateCart = {
+      ...cart,
+      products: cart.products.map((item) =>
+        item.product.id === productId ? { ...item, quantity: newQuantity } : item,
+      ),
+    };
+    this._cart$.next(updateCart);
+    if (this._auth.isLoggedIn()) this._cartapi.updateCart(CartAdapter.toAPI(updateCart));
   }
 
   removeProductToCart(prod: IProduct) {
     const cart = this.getCartStorage();
-    cart.products = cart.products.filter((item) => item.product.id !== prod.id);
-    return this._cart$.next(cart);
+    const updateCart = {
+      ...cart,
+      products: cart.products.filter((item) => item.product.id !== prod.id),
+    };
+    this._cart$.next(updateCart);
+    if (this._auth.isLoggedIn()) this._cartapi.updateCart(CartAdapter.toAPI(updateCart));
   }
 
   getCartStorage() {
@@ -77,9 +94,7 @@ export class CartProductsService {
 
   loadUserCart(): void {
     const userId = this._auth.getUserId();
-
     if (!userId || userId === 0) return;
-
     this._cartapi
       .getCart(userId)
       .pipe(

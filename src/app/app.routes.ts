@@ -25,4 +25,8 @@ export const routes: Routes = [
     path: APP_ROUTES.AUTH.ROOT,
     loadChildren: () => import('./features/auth/auth.routes').then((r) => r.AUTH_ROUTES),
   },
+  {
+    path: '**',
+    redirectTo: APP_ROUTES.HOME.ROOT,
+  },
 ];

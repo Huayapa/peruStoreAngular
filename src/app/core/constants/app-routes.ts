@@ -1,20 +1,3 @@
-export const APP_ROUTES_OLD = {
-  HOME: '',
-  AUTH: {
-    ROOT: 'auth',
-    LOGIN: 'login',
-    REGISTER: 'register',
-  },
-  CART: {
-    ROOT: 'cart',
-  },
-  PRODUCTS: {
-    ROOT: 'products',
-    DETAIL: 'products/:id',
-    DETAIL_LINK: (id: number) => `products/${id}`,
-  },
-} as const;
-
 export const APP_ROUTES = {
   HOME: {
     ROOT: '',
@@ -35,6 +18,14 @@ export const APP_ROUTES = {
   CART: {
     ROOT: 'cart',
     TITLE: 'Carrito de compras',
+    CHECKOUT: {
+      ROOT: 'checkout',
+      TITLE: 'Checkout',
+      SUCCESS: {
+        ROOT: 'success',
+        TITLE: 'Pedido Confirmado',
+      },
+    },
   },
   PRODUCTS: {
     ROOT: 'products',

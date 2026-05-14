@@ -6,5 +6,13 @@ export const CART_ROUTES: Routes = [
     path: '',
     title: APP_ROUTES.CART.TITLE,
     data: { breadcrumb: APP_ROUTES.CART.TITLE },
+    loadComponent: () => import('./pages/cart-detail/cart-detail'),
+    children: [
+      {
+        path: APP_ROUTES.CART.CHECKOUT.ROOT,
+        title: APP_ROUTES.CART.CHECKOUT.TITLE,
+        loadComponent: () => import('./pages/checkout/checkout'),
+      },
+    ],
   },
 ];

@@ -24,12 +24,27 @@
         >
           <mat-icon fontIcon="shopping_cart"></mat-icon>
         </button>
-        <button
-          matIconButton
-          [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.LOGIN.ROOT}`"
-        >
-          <mat-icon fontIcon="login"></mat-icon>
-        </button>
+        @if (!isLogged()) {
+          <button
+            matIconButton
+            [routerLink]="`/${APP_ROUTES.AUTH.ROOT}/${APP_ROUTES.AUTH.LOGIN.ROOT}`"
+          >
+            <mat-icon fontIcon="login"></mat-icon>
+          </button>
+        } @else {
+          <button matIconButton [matMenuTriggerFor]="perfil" aria-label="Perfil">
+            <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #perfil="matMenu">
+            <div class="header__perfil-info">
+              <p class="header__perfil-user">{{ isLogged() }}</p>
+            </div>
+            <button mat-menu-item>
+              <mat-icon>logout</mat-icon>
+              <span>Cerrar Sesión</span>
+            </button>
+          </mat-menu>
+        }
         <button matIconButton class="header__btn" (click)="sidenav.toogleSideBar()">
           <mat-icon fontIcon="menu"></mat-icon>
         </button>

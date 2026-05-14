@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 import { APP_ROUTES } from '../../core/constants/app-routes';
 import { exitFormGuardFn } from '../../core/guards/exit-form-guard';
+import { publicGuard } from '../../core/guards/public-guard';
 
 export const AUTH_ROUTES: Routes = [
   {
     path: '',
     title: APP_ROUTES.AUTH.TITLE,
     data: { breadcrumb: APP_ROUTES.AUTH.TITLE },
+    canActivate: [publicGuard],
     children: [
       {
         path: APP_ROUTES.AUTH.LOGIN.ROOT,

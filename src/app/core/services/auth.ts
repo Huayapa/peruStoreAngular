@@ -8,7 +8,7 @@ import {
   IRegisterRequest,
   IRegisterResponse,
 } from '../interfaces/auth.interfaces';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HANDLE_HTTP_INTERCEPTOR } from '../interceptors/error-api-interceptor';
 import { SKIP_AUTH } from '../interceptors/auth-interceptor';
 
@@ -23,8 +23,17 @@ export class AuthService {
     context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true).set(SKIP_AUTH, true),
   };
 
+  private readonly _isLogged$ = new BehaviorSubject<string>(this.getUserName());
+  isLogged$ = this._isLogged$.asObservable();
+
   saveToken(token: string): void {
     localStorage.setItem(this.tokenstorage, JSON.stringify({ token }));
+  }
+
+  getUserName(): string {
+    const token = localStorage.getItem(this.tokenstorage);
+    if (!token) return '';
+    return jwtDecode<{ user: string }>(token).user;
   }
 
   getUserId(): number {

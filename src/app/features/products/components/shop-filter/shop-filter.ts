@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { debounceTime, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CurrencyPipe } from '@angular/common';
 import { IFilterProduct } from '../../../../core/interfaces/product.interface';
@@ -57,6 +57,7 @@ export class ShopFilter implements OnInit {
   private changeValuesForm() {
     const params = this._routeActive.snapshot.queryParams;
     const opts = { emitEvent: false };
+    this.form.controls.fcategory.clear(opts);
     if (params['category']) {
       []
         .concat(params['category'])
@@ -70,6 +71,7 @@ export class ShopFilter implements OnInit {
     this._routeActive.queryParams
       .pipe(
         takeUntilDestroyed(this._destroyRef),
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
         map((params): IFilterProduct => this.getFilterProduct(params)),
       )
       .subscribe((data) => {

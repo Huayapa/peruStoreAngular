@@ -26,20 +26,32 @@ export class AuthService {
   private readonly _isLogged$ = new BehaviorSubject<string>(this.getUserName());
   isLogged$ = this._isLogged$.asObservable();
 
-  saveToken(token: string): void {
-    localStorage.setItem(this.tokenstorage, JSON.stringify({ token }));
+  private decodeToken<T>(): T | null {
+    try {
+      const data = localStorage.getItem(this.tokenstorage);
+      if (!data) return null;
+      const { token }: IAuthStorage = JSON.parse(data);
+      return jwtDecode<T>(token);
+    } catch {
+      return null;
+    }
   }
 
   getUserName(): string {
-    const token = localStorage.getItem(this.tokenstorage);
-    if (!token) return '';
-    return jwtDecode<{ user: string }>(token).user;
+    return this.decodeToken<{ user: string }>()?.user ?? '';
   }
 
   getUserId(): number {
-    const token = localStorage.getItem(this.tokenstorage);
-    if (!token) return 0;
-    return jwtDecode<{ sub: number }>(token).sub;
+    return this.decodeToken<{ sub: number }>()?.sub ?? 0;
+  }
+
+  isLoggedIn(): boolean {
+    return this.getToken() !== null;
+  }
+
+  saveToken(token: string): void {
+    localStorage.setItem(this.tokenstorage, JSON.stringify({ token }));
+    this._isLogged$.next(this.getUserName());
   }
 
   getToken(): IAuthStorage | null {
@@ -47,12 +59,9 @@ export class AuthService {
     return data ? JSON.parse(data) : null;
   }
 
-  isLoggedIn(): boolean {
-    return this.getToken() !== null;
-  }
-
-  removeToken() {
+  logout(): void {
     localStorage.removeItem(this.tokenstorage);
+    this._isLogged$.next('');
   }
 
   login(user: IAuthRequest): Observable<{ token: string }> {

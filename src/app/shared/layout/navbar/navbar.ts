@@ -50,4 +50,10 @@ export class Navbar {
   onScroll(): void {
     this.hideTop = window.scrollY > 200;
   }
+
+  logout(): void {
+    if (this._auth.isLoggedIn()) {
+      this._auth.logout();
+    }
+  }
 }

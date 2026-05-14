@@ -39,7 +39,7 @@
             <div class="header__perfil-info">
               <p class="header__perfil-user">{{ isLogged() }}</p>
             </div>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="logout()">
               <mat-icon>logout</mat-icon>
               <span>Cerrar Sesión</span>
             </button>

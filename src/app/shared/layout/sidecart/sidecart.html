@@ -27,6 +27,9 @@
       <span class="sidecart__subtitle">Total</span>
       <span class="sidecart__total">{{ totalProduct() | currency }}</span>
     </div>
-    <button matButton="filled">Ver Checkout</button>
+    <button matButton="tonal" [routerLink]="APP_ROUTES.CART.ROOT">Ver Carrito de compra</button>
+    <button matButton="filled" [routerLink]="[APP_ROUTES.CART.ROOT, APP_ROUTES.CART.CHECKOUT.ROOT]">
+      Ver Checkout
+    </button>
   </article>
 </section>

@@ -1,1 +1,84 @@
-<p>cart-detail works!</p>
+<main class="cart-detail">
+  <div class="container">
+    <div class="cart-detail__main">
+      <section class="cart-detail__content">
+        <h1 class="cart-detail__title">Carrito de compras</h1>
+        <div class="cart-detail__table-wrapper">
+          <table class="cart-detail__table">
+            <thead>
+              <tr class="cart-detail__table-header">
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (prod of cart()?.products; track prod.product.id) {
+                <tr class="cart-detail__table-row">
+                  <td>
+                    <img
+                      class="cart-detail__table-img"
+                      [src]="prod.product.image"
+                      [alt]="prod.product.title"
+                    />
+                  </td>
+                  <td>
+                    <span class="cart-detail__table-text cart-detail__table-text--start">{{
+                      prod.product.title
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="cart-detail__table-text">{{ prod.product.price | currency }}</span>
+                  </td>
+                  <td>
+                    <input
+                      class="cart-detail__table-input"
+                      type="number"
+                      [value]="prod.quantity"
+                      min="1"
+                      (change)="updateStock(prod.product.id, $event)"
+                    />
+                  </td>
+                  <td>
+                    <button matMiniFab (click)="deleteProduct(prod.product)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    <div class="cart-detail__empty">
+                      <mat-icon>add_shopping_cart</mat-icon>
+                      <span class="cart-detail__empty-message"
+                        >No tiene ningun producto en su carrito</span
+                      >
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <aside class="cart-detail__summary">
+        <div class="cart-detail__content">
+          <h2 class="cart-detail__subtitle">Resumen del pedido</h2>
+          <div class="cart-detail__info">
+            <div class="cart-detail__row">
+              <span class="cart-detail__text">Subtotal</span>
+              <span class="cart-detail__text">{{ total() | currency }}</span>
+            </div>
+            <div class="cart-detail__row">
+              <span class="cart-detail__text">Total (No incluye shipping)</span>
+              <span class="cart-detail__text">{{ total() | currency }}</span>
+            </div>
+          </div>
+          <button matButton="filled">Ver Checkout</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>

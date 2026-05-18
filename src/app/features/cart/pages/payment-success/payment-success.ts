@@ -29,7 +29,7 @@ export default class PaymentSuccessPage implements OnInit {
 
   viewSuccessPaymentDialog() {
     this.dialog.open(PaymentSuccessDialog, {
-      width: '500px',
+      width: '300px',
     });
   }
 }

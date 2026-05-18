@@ -1,7 +1,11 @@
-<h2 mat-dialog-title>Pago realizado exitosamente</h2>
+<h2 mat-dialog-title class="dialog__text">Pago realizado exitosamente</h2>
 <mat-dialog-content>
-  <ng-lottie [options]="optslottie" width="50" height="50"></ng-lottie>
-  <p>Tu pedido ha sido confirmado. En breve recibirás un correo con los detalles de tu compra.</p>
+  <div class="dialog__container">
+    <ng-lottie [options]="optslottie" class="dialog__lottie"></ng-lottie>
+  </div>
+  <p class="dialog__text">
+    Tu pedido ha sido confirmado. En breve recibirás un correo con los detalles de tu compra.
+  </p>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button matButton cdkFocusInitial (click)="close()">Cerrar</button>

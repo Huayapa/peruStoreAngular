@@ -1,1 +1,51 @@
-<p>checkout works!</p>
+<main class="checkout">
+  <div class="container">
+    <div class="checkout__main">
+      <section class="checkout__details">
+        <h1 class="checkout__title">Checkout</h1>
+        <div class="checkout__details-list">
+          @for (prod of cart()?.products; track prod.product.id) {
+            <article class="checkout__detail detail">
+              <img class="detail__img" [src]="prod.product.image" [alt]="prod.product.title" />
+              <div class="detail__info">
+                <span class="detail__text">{{ prod.product.title }}</span>
+                <span class="detail__text detail__text--stock">Cantidad: {{ prod.quantity }}</span>
+              </div>
+              <div class="detail__action">
+                <span class="detail__text detail__text--price">{{
+                  prod.product.price | currency
+                }}</span>
+              </div>
+            </article>
+          } @empty {
+            <div class="checkout__empty">
+              <mat-icon>add_shopping_cart</mat-icon>
+              <span class="checkout__empty-message">No tiene ningun producto en su carrito</span>
+            </div>
+          }
+        </div>
+        <div class="checkout__details-price">
+          <span>Total:</span>
+          <span>{{ pricetotal() | currency }}</span>
+        </div>
+      </section>
+      <section class="checkout__payment">
+        <form id="payment-form" class="checkout__form" (submit)="pay($event)">
+          <h2 class="checkout__title checkout__title--center">Metodo de Págo</h2>
+          <div id="payment-element" class="checkout__form-element"></div>
+          @if (loading()) {
+            <mat-spinner></mat-spinner>
+          }
+          <button
+            id="submit"
+            matButton="filled"
+            class="checkout__form-submit"
+            [disabled]="loading()"
+          >
+            {{ loading() ? 'Procesando...' : 'Pagar' }}
+          </button>
+        </form>
+      </section>
+    </div>
+  </div>
+</main>

@@ -7,6 +7,7 @@ import { CurrencyPipe } from '@angular/common';
 import { IProduct } from '../../../../shared/interfaces/product.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
+import { APP_ROUTES } from '../../../../core/constants/app-routes';
 
 @Component({
   selector: 'app-cart-detail',
@@ -18,6 +19,7 @@ export default class CartDetailPage {
   private readonly _cardProducts = inject(CartProductsService);
   private readonly _dialog = inject(MatDialog);
   private readonly _destroyRef = inject(DestroyRef);
+  readonly APP_ROUTES = APP_ROUTES;
 
   cart = toSignal(this._cardProducts.cartproduct$, { initialValue: null });
   total = toSignal(this._cardProducts.totalPrice$, { initialValue: 0 });

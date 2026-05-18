@@ -21,10 +21,10 @@ export const APP_ROUTES = {
     CHECKOUT: {
       ROOT: 'checkout',
       TITLE: 'Checkout',
-      SUCCESS: {
-        ROOT: 'success',
-        TITLE: 'Pedido Confirmado',
-      },
+    },
+    SUCCESS: {
+      ROOT: 'payment-success',
+      TITLE: 'Verificando pago',
     },
   },
   PRODUCTS: {

@@ -120,4 +120,14 @@ export class CartProductsService {
 
     return forkJoin(requests).pipe(map((products) => CartAdapter.fromAPI(cart, products)));
   }
+
+  clearCart() {
+    const cart = this.getCartStorage();
+    const clearCart: ICartProduct = {
+      ...cart,
+      products: [],
+    };
+    this._cart$.next(clearCart);
+    if (this._auth.isLoggedIn()) this._cartapi.updateCart(CartAdapter.toAPI(clearCart));
+  }
 }

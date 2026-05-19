@@ -80,9 +80,11 @@ export class CartProductsService {
     return cart ? (JSON.parse(cart) as ICartProduct) : this.createEmptyCart();
   }
 
+  // Aqui no te olvides de validar que el producto local y el nuevo sean distintos para hacer el next()
   updateCartItems(prod: ICartItems[]) {
     const cart = this.getCartStorage();
     const newCart = { id: cart.id, userId: cart.userId, products: prod };
+    if (JSON.stringify(cart) === JSON.stringify(newCart)) return;
     this._cart$.next(newCart);
     if (this._auth.isLoggedIn()) this._cartapi.updateCart(CartAdapter.toAPI(newCart));
   }

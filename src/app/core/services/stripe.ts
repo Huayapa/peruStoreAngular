@@ -5,7 +5,11 @@ import { ICartItems, ICartProduct } from '../interfaces/cart.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CartAdapter } from '../adapters/cart.adapter';
-
+export interface IPaymentIntentResponse {
+  clientSecret: string;
+  products: ICartItems[];
+  price: number;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -40,14 +44,13 @@ export class StripeService {
   async createPaymentIntent(
     cart: ICartProduct,
     clientSecretkey: string | null,
-  ): Promise<{ clientSecret: string; products: ICartItems[]; price: number }> {
-    const { clientSecret, products, price } = await firstValueFrom(
-      this._http.post<{ clientSecret: string; products: ICartItems[]; price: number }>(
-        `${this.apiUrl}/create-payment-intent`,
-        { cart: CartAdapter.toAPI(cart), clientSecretkey },
-      ),
+  ): Promise<IPaymentIntentResponse> {
+    return await firstValueFrom(
+      this._http.post<IPaymentIntentResponse>(`${this.apiUrl}/create-payment-intent`, {
+        cart: CartAdapter.toAPI(cart),
+        clientSecretkey,
+      }),
     );
-    return { clientSecret, products, price };
   }
 
   mountElements(clientSecret: string) {

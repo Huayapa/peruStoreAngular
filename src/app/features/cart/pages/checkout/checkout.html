@@ -1,54 +1,98 @@
 <main class="checkout">
   <div class="container">
-    <div class="checkout__main">
-      <section class="checkout__details">
-        <h1 class="checkout__title">Checkout</h1>
-        <div class="checkout__details-list">
-          @for (prod of products(); track prod.product.id) {
-            <article class="checkout__detail detail">
-              <img class="detail__img" [src]="prod.product.image" [alt]="prod.product.title" />
-              <div class="detail__info">
-                <span class="detail__text">{{ prod.product.title }}</span>
-                <span class="detail__text detail__text--stock">Cantidad: {{ prod.quantity }}</span>
-              </div>
-              <div class="detail__action">
-                <span class="detail__text detail__text--price">{{
-                  prod.product.price | currency
-                }}</span>
-              </div>
-            </article>
-          } @empty {
-            <div class="checkout__empty">
-              <mat-icon>add_shopping_cart</mat-icon>
-              <span class="checkout__empty-message">No tiene ningun producto en su carrito</span>
+    <form id="payment-form" class="checkout__wrapper" (submit)="pay($event)">
+      <div>
+        <section class="checkout__section">
+          <h2 class="checkout__subtitle">Datos Personales</h2>
+          <div class="checkout__fields">
+            <div class="checkout__row">
+              <mat-form-field class="checkout__field">
+                <mat-label>Nombre Completo</mat-label>
+                <input type="text" matInput placeholder="xxxx xxxx xxxx xxxx" />
+                <mat-error>El nombre es <strong>requerido</strong></mat-error>
+              </mat-form-field>
+              <mat-form-field class="checkout__field">
+                <mat-label>Correo Electronico</mat-label>
+                <input type="email" matInput placeholder="Ex. pat@example.com" />
+                <mat-error>El correo es <strong>requerido</strong></mat-error>
+              </mat-form-field>
             </div>
-          }
-        </div>
-        <div class="checkout__details-price">
-          <span>Total:</span>
-          <span>{{ pricetotal() | currency }}</span>
-        </div>
-      </section>
-      <section class="checkout__payment">
-        <form id="payment-form" class="checkout__form" (submit)="pay($event)">
-          <h2 class="checkout__title checkout__title--center">Metodo de Págo</h2>
-          <div id="payment-element" class="checkout__form-element"></div>
-          @if (loading()) {
-            <mat-spinner></mat-spinner>
-          }
-          @if (errorMessage()) {
-            <p>{{ errorMessage() }}</p>
-          }
-          <button
-            id="submit"
-            matButton="filled"
-            class="checkout__form-submit"
-            [disabled]="loading()"
-          >
-            {{ loading() ? 'Procesando...' : 'Pagar' }}
-          </button>
-        </form>
-      </section>
-    </div>
+            <div class="checkout__row">
+              <mat-form-field class="checkout__field">
+                <mat-label>Telefono</mat-label>
+                <input type="tel" matInput placeholder="555-555-1234" />
+              </mat-form-field>
+              <mat-form-field class="checkout__field">
+                <mat-label>Ciudad</mat-label>
+                <input matInput placeholder="Ex. San Francisco" />
+              </mat-form-field>
+            </div>
+            <div class="checkout__row">
+              <mat-form-field class="checkout__field">
+                <mat-label>Estado</mat-label>
+                <input matInput placeholder="Ex. California" />
+              </mat-form-field>
+              <mat-form-field class="checkout__field">
+                <mat-label>Código Postal</mat-label>
+                <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" />
+                <mat-hint align="end">{{ postalCode.value.length }} / 5</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="checkout__row">
+              <mat-form-field class="checkout__field checkout__field--full">
+                <mat-label>Dirección</mat-label>
+                <textarea matInput placeholder="Ex. 100 Main St"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div>
+        <section class="checkout__section">
+          <div class="checkout__detail-payments">
+            <h1 class="checkout__title">Checkout</h1>
+            <ul class="checkout__details">
+              @for (prod of products(); track prod.product.id) {
+                <li class="checkout__item item">
+                  <img class="item__img" [src]="prod.product.image" [alt]="prod.product.title" />
+                  <div class="item__info">
+                    <span class="item__name">{{ prod.product.title }}</span>
+                    <span class="item__quantity">Cantidad: {{ prod.quantity }}</span>
+                  </div>
+                  <span class="item__price">{{ prod.product.price | currency }}</span>
+                </li>
+              } @empty {
+                <section class="checkout__empty">
+                  <mat-icon>add_shopping_cart</mat-icon>
+                  <span class="checkout__empty-text">No tiene ningun producto en su carrito</span>
+                </section>
+              }
+            </ul>
+            <div class="checkout__total">
+              <span>Total:</span>
+              <span>{{ pricetotal() | currency }}</span>
+            </div>
+          </div>
+          <div class="checkout__payments">
+            <h2 class="checkout__subtitle">Metodo de Págo</h2>
+            <div id="payment-element" class="checkout__payment-element"></div>
+            @if (loading()) {
+              <mat-spinner></mat-spinner>
+            }
+            @if (errorMessage()) {
+              <p class="checkout__error">{{ errorMessage() }}</p>
+            }
+            <button
+              id="submit"
+              matButton="filled"
+              class="checkout__submit"
+              [disabled]="loading() || !!errorMessage()"
+            >
+              {{ loading() ? 'Procesando...' : 'Pagar' }}
+            </button>
+          </div>
+        </section>
+      </div>
+    </form>
   </div>
 </main>

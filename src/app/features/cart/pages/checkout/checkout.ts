@@ -8,12 +8,23 @@ import { MatAnchor } from '@angular/material/button';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ICartItems } from '../../../../core/interfaces/cart.interfaces';
-import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { MatFormField, MatLabel, MatError, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-checkout',
-  imports: [MatProgressSpinner, CurrencyPipe, MatIcon, MatAnchor],
+  imports: [
+    MatProgressSpinner,
+    CurrencyPipe,
+    MatIcon,
+    MatAnchor,
+    MatFormField,
+    MatLabel,
+    MatError,
+    MatInput,
+    MatHint,
+  ],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })
@@ -34,28 +45,33 @@ export default class CheckoutPage implements OnInit {
     await this._stripe.init();
     this.loading.set(true);
 
-    try {
-      const cart = await firstValueFrom(this._cart.cartproduct$);
-      if (!cart.products.length) {
-        this.errorMessage.set('Debes agregar productos antes de continuar.');
-        return;
+    this._cart.cartproduct$.subscribe(async (cart) => {
+      try {
+        if (!cart.products.length) {
+          this.errorMessage.set('Debes agregar productos antes de continuar.');
+          return;
+        }
+        const { clientSecret, products, price } = await this._stripe.createPaymentIntent(
+          cart,
+          this.clientSecret() ?? null,
+        );
+        this.errorMessage.set('');
+        this.clientSecret.set(clientSecret);
+        this.products.set(products);
+        this.pricetotal.set(price / 100);
+        this._cart.updateCartItems(products);
+        this._stripe.mountElements(clientSecret);
+      } catch (err: unknown) {
+        if (err instanceof HttpErrorResponse && err.status === 400) {
+          this.errorMessage.set('El carrito está vacío o contiene datos inválidos.');
+        }
+        if (err instanceof HttpErrorResponse && err.status === 0) {
+          this.errorMessage.set('Servicio no disponible. Porfavor intente mas tarde.');
+        }
+      } finally {
+        this.loading.set(false);
       }
-      const { clientSecret, products, price } = await this._stripe.createPaymentIntent(
-        cart,
-        this.clientSecret() ?? null,
-      );
-      this.clientSecret.set(clientSecret);
-      this.products.set(products);
-      this.pricetotal.set(price / 100);
-      this._cart.updateCartItems(products);
-      this._stripe.mountElements(clientSecret);
-    } catch (err: unknown) {
-      if (err instanceof HttpErrorResponse && err.status === 400) {
-        this.errorMessage.set('El carrito está vacío o contiene datos inválidos.');
-      }
-    } finally {
-      this.loading.set(false);
-    }
+    });
   }
 
   async pay(e: Event) {

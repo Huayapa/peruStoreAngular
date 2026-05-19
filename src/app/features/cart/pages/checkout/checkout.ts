@@ -9,6 +9,7 @@ import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ICartItems } from '../../../../core/interfaces/cart.interfaces';
 import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -18,6 +19,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export default class CheckoutPage implements OnInit {
   private readonly _stripe = inject(StripeService);
+  private readonly _routeActive = inject(ActivatedRoute);
   private readonly _cart = inject(CartProductsService);
   readonly errorMessage = signal('');
   readonly loading = signal(false);
@@ -26,6 +28,9 @@ export default class CheckoutPage implements OnInit {
   readonly clientSecret = signal<string | null>(null);
 
   async ngOnInit(): Promise<void> {
+    const error = this._routeActive.snapshot.queryParamMap.get('payment_error');
+    if (error) this.errorMessage.set(error);
+
     await this._stripe.init();
     this.loading.set(true);
 
@@ -39,11 +44,11 @@ export default class CheckoutPage implements OnInit {
         cart,
         this.clientSecret() ?? null,
       );
-      this._stripe.mountElements(clientSecret);
       this.clientSecret.set(clientSecret);
       this.products.set(products);
       this.pricetotal.set(price / 100);
       this._cart.updateCartItems(products);
+      this._stripe.mountElements(clientSecret);
     } catch (err: unknown) {
       if (err instanceof HttpErrorResponse && err.status === 400) {
         this.errorMessage.set('El carrito está vacío o contiene datos inválidos.');

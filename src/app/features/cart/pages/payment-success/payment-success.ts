@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentSuccessDialog } from '../../components/payment-success-dialog/payment-success-dialog';
@@ -13,18 +13,18 @@ import { CartProductsService } from '../../../../core/services/cart-products';
 })
 export default class PaymentSuccessPage implements OnInit {
   private readonly _router = inject(Router);
+  private readonly _routerActive = inject(ActivatedRoute);
   private readonly _cart = inject(CartProductsService);
   private readonly _dialog = inject(MatDialog);
   ngOnInit(): void {
-    const params = new URLSearchParams(window.location.search);
-    const status = params.get('redirect_status');
+    const status = this._routerActive.snapshot.queryParamMap.get('redirect_status');
     if (status === 'succeeded') {
       this._router.navigate([APP_ROUTES.HOME.ROOT]).then(() => {
         this.viewSuccessPaymentDialog();
         this._cart.clearCart();
       });
     } else {
-      this._router.navigate([APP_ROUTES.CART.CHECKOUT.ROOT], {
+      this._router.navigate([APP_ROUTES.CART.ROOT, APP_ROUTES.CART.CHECKOUT.ROOT], {
         queryParams: { error: 'Pago Fallido' },
       });
     }

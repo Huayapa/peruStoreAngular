@@ -80,6 +80,13 @@ export class CartProductsService {
     return cart ? (JSON.parse(cart) as ICartProduct) : this.createEmptyCart();
   }
 
+  updateCartItems(prod: ICartItems[]) {
+    const cart = this.getCartStorage();
+    const newCart = { id: cart.id, userId: cart.userId, products: prod };
+    this._cart$.next(newCart);
+    if (this._auth.isLoggedIn()) this._cartapi.updateCart(CartAdapter.toAPI(newCart));
+  }
+
   private updateCartStorage(cart: ICartProduct) {
     localStorage.setItem(this.cartstorage, JSON.stringify(cart));
   }

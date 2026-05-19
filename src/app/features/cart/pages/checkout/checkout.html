@@ -4,7 +4,7 @@
       <section class="checkout__details">
         <h1 class="checkout__title">Checkout</h1>
         <div class="checkout__details-list">
-          @for (prod of cart()?.products; track prod.product.id) {
+          @for (prod of products(); track prod.product.id) {
             <article class="checkout__detail detail">
               <img class="detail__img" [src]="prod.product.image" [alt]="prod.product.title" />
               <div class="detail__info">
@@ -35,6 +35,9 @@
           <div id="payment-element" class="checkout__form-element"></div>
           @if (loading()) {
             <mat-spinner></mat-spinner>
+          }
+          @if (errorMessage()) {
+            <p>{{ errorMessage() }}</p>
           }
           <button
             id="submit"

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Appearance, loadStripe, Stripe, StripeElements, StripeError } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
-import { ICartProduct } from '../interfaces/cart.interfaces';
+import { ICartItems, ICartProduct } from '../interfaces/cart.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CartAdapter } from '../adapters/cart.adapter';
@@ -37,19 +37,25 @@ export class StripeService {
       this.stripe = await loadStripe(environment.stripePublicKey);
     }
   }
-
-  async createPaymentIntent(cart: ICartProduct): Promise<string> {
-    const { clientSecret } = await firstValueFrom(
-      this._http.post<{ clientSecret: string }>(
+  async createPaymentIntent(
+    cart: ICartProduct,
+    clientSecretkey: string | null,
+  ): Promise<{ clientSecret: string; products: ICartItems[]; price: number }> {
+    const { clientSecret, products, price } = await firstValueFrom(
+      this._http.post<{ clientSecret: string; products: ICartItems[]; price: number }>(
         `${this.apiUrl}/create-payment-intent`,
-        CartAdapter.toAPI(cart),
+        { cart: CartAdapter.toAPI(cart), clientSecretkey },
       ),
     );
-    return clientSecret;
+    return { clientSecret, products, price };
   }
 
   mountElements(clientSecret: string) {
     if (!this.stripe) throw new Error('Stripe not inicializado');
+    if (this.elements) {
+      const existing = this.elements.getElement('payment');
+      if (existing) existing.destroy();
+    }
     this.elements = this.stripe.elements({
       appearance: this.appearance,
       clientSecret,

@@ -1,15 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { Appearance, loadStripe, Stripe, StripeElements, StripeError } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
-import { ICartItems, ICartProduct } from '../interfaces/cart.interfaces';
+import { ICartProduct } from '../interfaces/cart.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CartAdapter } from '../adapters/cart.adapter';
-export interface IPaymentIntentResponse {
-  clientSecret: string;
-  products: ICartItems[];
-  price: number;
-}
+import { IPaymentIntent } from '../interfaces/stripe.interfaces';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -44,9 +41,9 @@ export class StripeService {
   async createPaymentIntent(
     cart: ICartProduct,
     clientSecretkey: string | null,
-  ): Promise<IPaymentIntentResponse> {
+  ): Promise<IPaymentIntent> {
     return await firstValueFrom(
-      this._http.post<IPaymentIntentResponse>(`${this.apiUrl}/create-payment-intent`, {
+      this._http.post<IPaymentIntent>(`${this.apiUrl}/create-payment-intent`, {
         cart: CartAdapter.toAPI(cart),
         clientSecretkey,
       }),

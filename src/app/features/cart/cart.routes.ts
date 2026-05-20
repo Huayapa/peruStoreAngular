@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { APP_ROUTES } from '../../core/constants/app-routes';
+import { exitFormGuardFn } from '../../core/guards/exit-form-guard';
 
 export const CART_ROUTES: Routes = [
   {
@@ -11,6 +12,7 @@ export const CART_ROUTES: Routes = [
   {
     path: APP_ROUTES.CART.CHECKOUT.ROOT,
     title: APP_ROUTES.CART.CHECKOUT.TITLE,
+    canDeactivate: [exitFormGuardFn],
     loadComponent: () => import('./pages/checkout/checkout'),
   },
   {

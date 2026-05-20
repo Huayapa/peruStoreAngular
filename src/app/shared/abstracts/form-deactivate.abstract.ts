@@ -13,14 +13,12 @@ export abstract class FormDeactivateAbstract implements CanComponentDeactivate {
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeReload(e: BeforeUnloadEvent) {
-    const isValidForm = Object.values(this.form.controls).some((control) => control.value !== '');
-    if (isValidForm) e.preventDefault();
+    if (this.hasFormChanges()) e.preventDefault();
   }
 
   canDeactivate(): MaybeAsync<GuardResult> {
     if (this.allowNavigation) return true;
-    const isValidForm = Object.values(this.form.controls).some((control) => control.value !== '');
-    if (isValidForm) {
+    if (this.hasFormChanges()) {
       const dialog = this._dialog.open(ConfirmDialog, {
         width: '350px',
         enterAnimationDuration: '100ms',
@@ -33,5 +31,17 @@ export abstract class FormDeactivateAbstract implements CanComponentDeactivate {
       return dialog.afterClosed();
     }
     return true;
+  }
+
+  private hasFormChanges(): boolean {
+    return Object.entries(this.form.controls)
+      .filter(([key]) => key !== 'stripeReady')
+      .some(([, control]) => {
+        const value = control.value;
+        if (typeof value === 'object' && value !== null) {
+          return Object.values(value).some((v) => v !== '');
+        }
+        return value !== '';
+      });
   }
 }

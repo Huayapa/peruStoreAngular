@@ -1,47 +1,81 @@
 <main class="checkout">
   <div class="container">
-    <form id="payment-form" class="checkout__wrapper" (submit)="pay($event)">
+    <form id="payment-form" class="checkout__wrapper" (submit)="pay($event)" [formGroup]="form">
       <div>
         <section class="checkout__section">
           <h2 class="checkout__subtitle">Datos Personales</h2>
           <div class="checkout__fields">
-            <div class="checkout__row">
+            <div class="checkout__row" formGroupName="contact">
               <mat-form-field class="checkout__field">
                 <mat-label>Nombre Completo</mat-label>
-                <input type="text" matInput placeholder="xxxx xxxx xxxx xxxx" />
-                <mat-error>El nombre es <strong>requerido</strong></mat-error>
+                <input type="text" formControlName="name" matInput />
+                @if (getError(form.get('contact.name')); as err) {
+                  <mat-error>{{ err }}</mat-error>
+                }
               </mat-form-field>
               <mat-form-field class="checkout__field">
                 <mat-label>Correo Electronico</mat-label>
-                <input type="email" matInput placeholder="Ex. pat@example.com" />
-                <mat-error>El correo es <strong>requerido</strong></mat-error>
+                <input
+                  type="email"
+                  formControlName="email"
+                  matInput
+                  placeholder="example@example.com"
+                />
+                @if (getError(form.get('contact.email')); as err) {
+                  <mat-error>{{ err }}</mat-error>
+                }
               </mat-form-field>
             </div>
             <div class="checkout__row">
-              <mat-form-field class="checkout__field">
-                <mat-label>Telefono</mat-label>
-                <input type="tel" matInput placeholder="555-555-1234" />
-              </mat-form-field>
-              <mat-form-field class="checkout__field">
-                <mat-label>Ciudad</mat-label>
-                <input matInput placeholder="Ex. San Francisco" />
-              </mat-form-field>
+              <ng-container formGroupName="contact">
+                <mat-form-field class="checkout__field">
+                  <mat-label>Telefono</mat-label>
+                  <input type="tel" formControlName="phone" matInput placeholder="932 324 242" />
+                  @if (getError(form.get('contact.phone')); as err) {
+                    <mat-error>{{ err }}</mat-error>
+                  }
+                </mat-form-field>
+              </ng-container>
+              <ng-container formGroupName="address">
+                <mat-form-field class="checkout__field">
+                  <mat-label>Ciudad</mat-label>
+                  <input matInput formControlName="city" placeholder="Lima" />
+                  @if (getError(form.get('address.city')); as err) {
+                    <mat-error>{{ err }}</mat-error>
+                  }
+                </mat-form-field>
+              </ng-container>
             </div>
-            <div class="checkout__row">
+            <div class="checkout__row" formGroupName="address">
               <mat-form-field class="checkout__field">
                 <mat-label>Estado</mat-label>
-                <input matInput placeholder="Ex. California" />
+                <input matInput formControlName="state" placeholder="Lima" />
+                @if (getError(form.get('address.state')); as err) {
+                  <mat-error>{{ err }}</mat-error>
+                }
               </mat-form-field>
               <mat-form-field class="checkout__field">
                 <mat-label>Código Postal</mat-label>
-                <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" />
+                <input
+                  matInput
+                  formControlName="zipcode"
+                  #postalCode
+                  maxlength="5"
+                  placeholder="94105"
+                />
                 <mat-hint align="end">{{ postalCode.value.length }} / 5</mat-hint>
+                @if (getError(form.get('address.zipcode')); as err) {
+                  <mat-error>{{ err }}</mat-error>
+                }
               </mat-form-field>
             </div>
-            <div class="checkout__row">
+            <div class="checkout__row" formGroupName="address">
               <mat-form-field class="checkout__field checkout__field--full">
                 <mat-label>Dirección</mat-label>
-                <textarea matInput placeholder="Ex. 100 Main St"></textarea>
+                <textarea matInput formControlName="address" placeholder="100 Main St"></textarea>
+                @if (getError(form.get('address.address')); as err) {
+                  <mat-error>{{ err }}</mat-error>
+                }
               </mat-form-field>
             </div>
           </div>

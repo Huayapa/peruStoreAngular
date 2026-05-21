@@ -122,8 +122,9 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   async pay(e: Event) {
     e.preventDefault();
     if (this.form.invalid) return this.form.markAllAsTouched();
-    this.allowNavigation = true;
     this.loading.set(true);
+    this.allowNavigation = true;
+    this.form.reset();
     const { error } = await this._stripe.confirmPayment(
       `${window.location.origin}/${APP_ROUTES.CART.ROOT}/${APP_ROUTES.CART.SUCCESS.ROOT}`,
     );

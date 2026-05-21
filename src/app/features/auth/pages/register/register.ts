@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconButton, MatAnchor } from '@angular/material/button';
 import { MatFormField, MatLabel, MatSuffix, MatError } from '@angular/material/form-field';
@@ -15,6 +15,7 @@ import {
   PasswordStateMatcher,
 } from '../../validators/cross-password.validator';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
@@ -36,6 +37,7 @@ import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deacti
 })
 export default class RegisterPage extends FormDeactivateAbstract {
   private readonly _fbNon = inject(NonNullableFormBuilder);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _auth = inject(AuthService);
   private readonly _router = inject(Router);
@@ -69,15 +71,18 @@ export default class RegisterPage extends FormDeactivateAbstract {
     this.isLoading.set(true);
     const { username, email, password } = this.form.getRawValue();
     const newuser: IRegisterRequest = { username, email, password };
-    this._auth.register(newuser).subscribe({
-      next: () => {
-        this.allowNavigation = true;
-        this.form.reset();
-        this.isLoading.set(false);
-        this.openSnackBar();
-        this._router.navigate([APP_ROUTES.AUTH.ROOT, APP_ROUTES.AUTH.LOGIN.ROOT]);
-      },
-      error: () => this.isLoading.set(false),
-    });
+    this._auth
+      .register(newuser)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: () => {
+          this.allowNavigation = true;
+          this.form.reset();
+          this.isLoading.set(false);
+          this.openSnackBar();
+          this._router.navigate([APP_ROUTES.AUTH.ROOT, APP_ROUTES.AUTH.LOGIN.ROOT]);
+        },
+        error: () => this.isLoading.set(false),
+      });
   }
 }

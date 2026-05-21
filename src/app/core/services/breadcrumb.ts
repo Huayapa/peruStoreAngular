@@ -1,22 +1,29 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BehaviorSubject, filter } from 'rxjs';
 import { IBreadcrumb } from '../interfaces/breadcrumb.interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Injectable({
   providedIn: 'root',
 })
 export class BreadcrumbService {
   private readonly _router = inject(Router);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _activatedRoute = inject(ActivatedRoute);
   private readonly _breadcrumbs$ = new BehaviorSubject<IBreadcrumb[]>([]);
   readonly breadcrumbs$ = this._breadcrumbs$.asObservable();
 
   constructor() {
-    this._router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      const root = this._activatedRoute.root;
-      const breadcrumbs = this.createBreadcrumbs(root);
-      this._breadcrumbs$.next(breadcrumbs);
-    });
+    this._router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe(() => {
+        const root = this._activatedRoute.root;
+        const breadcrumbs = this.createBreadcrumbs(root);
+        this._breadcrumbs$.next(breadcrumbs);
+      });
   }
 
   private createBreadcrumbs(

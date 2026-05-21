@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { AuthService } from './auth';
 import { BehaviorSubject, filter, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { ICartItems, ICartProduct, ICartResponse } from '../interfaces/cart.interfaces';
@@ -6,12 +6,14 @@ import { IProduct } from '../../shared/interfaces/product.interface';
 import { CartApiService } from './cart-api';
 import { CartAdapter } from '../adapters/cart.adapter';
 import { ProductService } from './product';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartProductsService {
   private readonly _product = inject(ProductService);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _auth = inject(AuthService);
   private readonly _cartapi = inject(CartApiService);
   private readonly cartstorage = 'cart_store';
@@ -26,7 +28,9 @@ export class CartProductsService {
   );
 
   constructor() {
-    this._cart$.subscribe((cart) => this.updateCartStorage(cart));
+    this._cart$
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((cart) => this.updateCartStorage(cart));
   }
 
   addProductToCart(prod: IProduct) {
@@ -49,7 +53,7 @@ export class CartProductsService {
     const request$ =
       updateCart.id === 0 ? this._cartapi.addNewCart(apiCart) : this._cartapi.updateCart(apiCart);
 
-    request$.subscribe();
+    request$.pipe(takeUntilDestroyed(this._destroyRef)).subscribe();
   }
 
   updateStock(productId: number, newQuantity: number) {
@@ -110,6 +114,7 @@ export class CartProductsService {
         filter((cart) => !!cart),
         switchMap((cart) => this.resolverCartProducts(cart)),
         filter((cartProduct) => !!cartProduct),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe((cartProduct) => {
         this._cart$.next(cartProduct);

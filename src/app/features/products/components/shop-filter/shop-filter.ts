@@ -81,7 +81,7 @@ export class ShopFilter implements OnInit {
   }
   private listenValueChangeForm(): void {
     this.form.valueChanges
-      .pipe(debounceTime(500), takeUntilDestroyed())
+      .pipe(debounceTime(500), takeUntilDestroyed(this._destroyRef))
       .subscribe(({ fcategory, fsearch, fmin, fmax }) => {
         this._router.navigate([], {
           queryParams: {

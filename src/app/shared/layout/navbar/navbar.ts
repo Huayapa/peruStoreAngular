@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, DestroyRef, HostListener, inject, signal } from '@angular/core';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
@@ -10,7 +10,7 @@ import { SearchBar } from '../../components/search-bar/search-bar';
 import { CartProductsService } from '../../../core/services/cart-products';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../../core/services/auth';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -34,6 +34,7 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class Navbar {
   private readonly _cartProduct = inject(CartProductsService);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _auth = inject(AuthService);
   totalItem = signal(0);
   isLogged = toSignal(this._auth.isLogged$);
@@ -43,7 +44,9 @@ export class Navbar {
   hideTop = false;
 
   constructor() {
-    this._cartProduct.totalItem$.subscribe((total) => this.totalItem.set(total));
+    this._cartProduct.totalItem$
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((total) => this.totalItem.set(total));
   }
 
   @HostListener('window:scroll')

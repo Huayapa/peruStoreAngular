@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { MatFormField, MatLabel, MatSuffix, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
@@ -13,6 +13,7 @@ import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deacti
 import { CartProductsService } from '../../../../core/services/cart-products';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { finalize } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,7 @@ import { finalize } from 'rxjs';
 })
 export default class LoginPage extends FormDeactivateAbstract {
   private readonly _cartProduct = inject(CartProductsService);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _fbNon = inject(NonNullableFormBuilder);
   private readonly _auth = inject(AuthService);
@@ -54,7 +56,10 @@ export default class LoginPage extends FormDeactivateAbstract {
     this.isLoading.set(true);
     this._auth
       .login(this.form.getRawValue())
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this._destroyRef),
+      )
       .subscribe(() => this.handleLoginSuccess());
   }
 
@@ -75,7 +80,10 @@ export default class LoginPage extends FormDeactivateAbstract {
         message: '¿Deseas reemplazar tu carrito actual con el de tu cuenta?',
       },
     });
-    dialog.afterClosed().subscribe((confirmed) => this.completeLoginProcess(confirmed));
+    dialog
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((confirmed) => this.completeLoginProcess(confirmed));
   }
 
   private completeLoginProcess(loadCartLogin: boolean) {

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { SidenavService } from '../../../core/services/sidenav';
 import { MatIconButton, MatAnchor } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { IProduct } from '../../interfaces/product.interface';
 import { RouterLink } from '@angular/router';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
 import { CurrencyPipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sidecart',
@@ -17,6 +18,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class Sidecart {
   private readonly _cartProduct = inject(CartProductsService);
+  private readonly _destroyRef = inject(DestroyRef);
   readonly APP_ROUTES = APP_ROUTES;
   readonly sidenav = inject(SidenavService);
 
@@ -24,10 +26,10 @@ export class Sidecart {
   totalProduct = signal<number>(0);
 
   constructor() {
-    this._cartProduct.cartproduct$.subscribe((cart) => {
+    this._cartProduct.cartproduct$.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((cart) => {
       this.cartProduct.set(cart);
     });
-    this._cartProduct.totalPrice$.subscribe((price) => {
+    this._cartProduct.totalPrice$.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((price) => {
       this.totalProduct.set(price);
     });
   }

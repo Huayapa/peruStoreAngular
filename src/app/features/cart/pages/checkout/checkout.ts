@@ -1,25 +1,25 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { StripeService } from '../../../../core/services/stripe';
-import { CartProductsService } from '../../../../core/services/cart-products';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CurrencyPipe } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
-import { MatAnchor } from '@angular/material/button';
-import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ICartItems, ICartProduct } from '../../../../core/interfaces/cart.interfaces';
-import { ActivatedRoute } from '@angular/router';
-import { MatFormField, MatLabel, MatError, MatHint } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
+import { MatAnchor } from '@angular/material/button';
+import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ActivatedRoute } from '@angular/router';
+import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { ICartItems, ICartProduct } from '../../../../core/interfaces/cart.interfaces';
 import { IPaymentIntent } from '../../../../core/interfaces/stripe.interfaces';
+import { CartProductsService } from '../../../../core/services/cart-products';
+import { StripeService } from '../../../../core/services/stripe';
+import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 
 @Component({
   selector: 'app-checkout',
@@ -122,16 +122,30 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   async pay(e: Event) {
     e.preventDefault();
     if (this.form.invalid) return this.form.markAllAsTouched();
+
+    this.errorMessage.set('');
     this.loading.set(true);
+
+    const { contact, address } = this.form.getRawValue();
+    const order = { ...contact, ...address };
+
+    const { ok, message } = await this._stripe.updatePaymentWithOrder(order, this.clientSecret());
+    if (!ok) {
+      this.errorMessage.set(message ?? 'No se logro actualizar los datos del orden');
+      this.loading.set(false);
+      return;
+    }
     this.allowNavigation = true;
-    this.form.reset();
+
     const { error } = await this._stripe.confirmPayment(
       `${window.location.origin}/${APP_ROUTES.CART.ROOT}/${APP_ROUTES.CART.SUCCESS.ROOT}`,
     );
     if (error) {
+      this.allowNavigation = false;
       this.errorMessage.set(error.message ?? 'Error desconocido');
+      this.loading.set(false);
+      return;
     }
-    this.loading.set(false);
   }
 
   getError(control: AbstractControl | null): string | null {

@@ -3,9 +3,10 @@ import { Appearance, loadStripe, Stripe, StripeElements, StripeError } from '@st
 import { environment } from '../../../environments/environment';
 import { ICartProduct } from '../interfaces/cart.interfaces';
 import { firstValueFrom } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CartAdapter } from '../adapters/cart.adapter';
 import { IPaymentIntent } from '../interfaces/stripe.interfaces';
+import { IOrder } from '../interfaces/order.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -72,5 +73,26 @@ export class StripeService {
       elements: this.elements,
       confirmParams: { return_url: returnUrl },
     });
+  }
+
+  async updatePaymentWithOrder(
+    order: IOrder,
+    clientSecret: string | null,
+  ): Promise<{ ok: boolean; message: string | undefined }> {
+    if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
+    try {
+      return await firstValueFrom(
+        this._http.post<{ ok: boolean; message: string | undefined }>(
+          `${this.apiUrl}/update-payment-intent`,
+          {
+            orderdata: order,
+            clientSecret,
+          },
+        ),
+      );
+    } catch (err) {
+      const error = err as HttpErrorResponse;
+      return { ok: false, message: error.error?.message };
+    }
   }
 }

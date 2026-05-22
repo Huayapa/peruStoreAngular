@@ -116,12 +116,7 @@
             @if (errorMessage()) {
               <p class="checkout__error">{{ errorMessage() }}</p>
             }
-            <button
-              id="submit"
-              matButton="filled"
-              class="checkout__submit"
-              [disabled]="loading() || !!errorMessage()"
-            >
+            <button id="submit" matButton="filled" class="checkout__submit" [disabled]="loading()">
               {{ loading() ? 'Procesando...' : 'Pagar' }}
             </button>
           </div>

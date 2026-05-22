@@ -13,7 +13,7 @@ export abstract class FormDeactivateAbstract implements CanComponentDeactivate {
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeReload(e: BeforeUnloadEvent) {
-    if (this.hasFormChanges()) e.preventDefault();
+    if (!this.allowNavigation && this.hasFormChanges()) e.preventDefault();
   }
 
   canDeactivate(): MaybeAsync<GuardResult> {

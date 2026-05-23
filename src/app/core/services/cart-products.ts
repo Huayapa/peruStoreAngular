@@ -1,6 +1,15 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { AuthService } from './auth';
-import { BehaviorSubject, filter, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  filter,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import { ICartItems, ICartProduct, ICartResponse } from '../interfaces/cart.interfaces';
 import { IProduct } from '../../shared/interfaces/product.interface';
 import { CartApiService } from './cart-api';
@@ -53,7 +62,15 @@ export class CartProductsService {
     const request$ =
       updateCart.id === 0 ? this._cartapi.addNewCart(apiCart) : this._cartapi.updateCart(apiCart);
 
-    request$.pipe(takeUntilDestroyed(this._destroyRef)).subscribe();
+    request$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+        catchError((err) => {
+          this._cart$.next(cart);
+          throw err;
+        }),
+      )
+      .subscribe();
   }
 
   updateStock(productId: number, newQuantity: number) {
@@ -84,7 +101,6 @@ export class CartProductsService {
     return cart ? (JSON.parse(cart) as ICartProduct) : this.createEmptyCart();
   }
 
-  // Aqui no te olvides de validar que el producto local y el nuevo sean distintos para hacer el next()
   updateCartItems(prod: ICartItems[]) {
     const cart = this.getCartStorage();
     const newCart = { id: cart.id, userId: cart.userId, products: prod };

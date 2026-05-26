@@ -44,7 +44,7 @@ export class StripeService {
     clientSecretkey: string | null,
   ): Promise<IPaymentIntent> {
     return await firstValueFrom(
-      this._http.post<IPaymentIntent>(`${this.apiUrl}/create-payment-intent`, {
+      this._http.post<IPaymentIntent>(`${this.apiUrl}/payment-intent`, {
         cart: CartAdapter.toAPI(cart),
         clientSecretkey,
       }),
@@ -78,21 +78,35 @@ export class StripeService {
   async updatePaymentWithOrder(
     order: IOrder,
     clientSecret: string | null,
-  ): Promise<{ ok: boolean; message: string | undefined }> {
+  ): Promise<{ success: boolean; message?: string }> {
     if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
     try {
-      return await firstValueFrom(
-        this._http.post<{ ok: boolean; message: string | undefined }>(
-          `${this.apiUrl}/update-payment-intent`,
-          {
-            orderdata: order,
-            clientSecret,
-          },
-        ),
+      await firstValueFrom(
+        this._http.patch<void>(`${this.apiUrl}/payment-intent`, {
+          orderdata: order,
+          clientSecret,
+        }),
       );
+      return { success: true };
     } catch (err) {
       const error = err as HttpErrorResponse;
-      return { ok: false, message: error.error?.message };
+      return { success: false, message: error.error?.message ?? 'Error desconocido' };
     }
+  }
+
+  async cancelPaymentIntent(clientSecret: string) {
+    if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
+    if (!clientSecret.includes('_secret')) throw new Error('clientSecret inválido');
+    const paymentIntentId = clientSecret.split('_secret')[0];
+    await firstValueFrom(
+      this._http.delete<void>(`${this.apiUrl}/payment-intent/${paymentIntentId}`),
+    );
+  }
+
+  async destroyElements() {
+    if (!this.elements) return;
+    const existing = this.elements.getElement('payment');
+    if (existing) existing.destroy();
+    this.elements = null;
   }
 }

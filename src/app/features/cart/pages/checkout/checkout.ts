@@ -85,19 +85,31 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   }
 
   private async handleCartChange(cart: ICartProduct) {
-    if (!cart.products.length) {
-      this.errorMessage.set('Debes agregar productos antes de continuar.');
-      return;
-    }
     this.loading.set(true);
     try {
       const intent = await this._stripe.createPaymentIntent(cart, this.clientSecret());
       this.applyPaymentIntent(intent);
     } catch (err) {
+      await this.clearPaymentIntent();
       this.handleError(err);
     } finally {
       this.loading.set(false);
     }
+  }
+
+  private async clearPaymentIntent() {
+    const secret = this.clientSecret();
+    if (secret) {
+      try {
+        await this._stripe.cancelPaymentIntent(secret);
+        await this._stripe.destroyElements();
+        this.pricetotal.set(0);
+      } catch (err) {
+        console.error('Error al cancelar intent:', err);
+      }
+    }
+    this.clientSecret.set(null);
+    this.products.set([]);
   }
 
   private applyPaymentIntent({ clientSecret, products, price }: IPaymentIntent) {
@@ -129,8 +141,11 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
     const { contact, address } = this.form.getRawValue();
     const order = { ...contact, ...address };
 
-    const { ok, message } = await this._stripe.updatePaymentWithOrder(order, this.clientSecret());
-    if (!ok) {
+    const { success, message } = await this._stripe.updatePaymentWithOrder(
+      order,
+      this.clientSecret(),
+    );
+    if (!success) {
       this.errorMessage.set(message ?? 'No se logro actualizar los datos del orden');
       this.loading.set(false);
       return;

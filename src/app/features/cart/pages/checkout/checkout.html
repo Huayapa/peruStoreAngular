@@ -98,7 +98,10 @@
               } @empty {
                 <section class="checkout__empty">
                   <mat-icon>add_shopping_cart</mat-icon>
-                  <span class="checkout__empty-text">No tiene ningun producto en su carrito</span>
+                  <span class="checkout__empty-text"
+                    >No tiene ningun producto en su carrito o el servicio de pagos no esta
+                    disponible</span
+                  >
                 </section>
               }
             </ul>
@@ -116,7 +119,12 @@
             @if (errorMessage()) {
               <p class="checkout__error">{{ errorMessage() }}</p>
             }
-            <button id="submit" matButton="filled" class="checkout__submit" [disabled]="loading()">
+            <button
+              id="submit"
+              matButton="filled"
+              class="checkout__submit"
+              [disabled]="loading() || products().length === 0"
+            >
               {{ loading() ? 'Procesando...' : 'Pagar' }}
             </button>
           </div>

@@ -15,7 +15,7 @@ export class StripeService {
   private readonly _http = inject(HttpClient);
   private stripe: Stripe | null = null;
   private elements: StripeElements | null = null;
-  private apiUrl = 'http://localhost:3000/stripe';
+  private apiUrl = environment.stripeApiUrl;
 
   private appearance: Appearance = {
     theme: 'flat',

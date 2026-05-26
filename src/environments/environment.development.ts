@@ -1,3 +1,5 @@
 import { commonEnvironment, IEnvironment } from './environment.common';
 
-export const environment: IEnvironment = { ...commonEnvironment };
+export const environment: IEnvironment = {
+  ...commonEnvironment,
+};

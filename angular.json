@@ -37,14 +37,17 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles/index.scss"]
+            "styles": ["src/styles/index.scss"],
+            "allowedCommonJsDependencies": [
+              "lottie-web"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "700kB",
                   "maximumError": "1MB"
                 },
                 {

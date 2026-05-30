@@ -11,6 +11,7 @@ import {
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HANDLE_HTTP_INTERCEPTOR } from '../interceptors/error-api-interceptor';
 import { SKIP_AUTH } from '../interceptors/auth-interceptor';
+import { SKIP_SESSION } from '../interceptors/checkout-session-interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,10 @@ export class AuthService {
   private readonly apiurl = environment.apiUrl;
   private readonly tokenstorage = 'auth_store';
   private readonly opts = {
-    context: new HttpContext().set(HANDLE_HTTP_INTERCEPTOR, true).set(SKIP_AUTH, true),
+    context: new HttpContext()
+      .set(HANDLE_HTTP_INTERCEPTOR, true)
+      .set(SKIP_AUTH, true)
+      .set(SKIP_SESSION, true),
   };
 
   private readonly _isLogged$ = new BehaviorSubject<string>(this.getUserName());

@@ -6,12 +6,15 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorApiInterceptorFn } from './core/interceptors/error-api-interceptor';
 import { authInterceptorFn } from './core/interceptors/auth-interceptor';
+import { checkoutSessionInterceptorFn } from './core/interceptors/checkout-session-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([errorApiInterceptorFn, authInterceptorFn])),
+    provideHttpClient(
+      withInterceptors([errorApiInterceptorFn, authInterceptorFn, checkoutSessionInterceptorFn]),
+    ),
     provideLottieOptions({ player: () => import('lottie-web') }),
     provideCacheableAnimationLoader(),
   ],

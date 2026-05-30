@@ -3,10 +3,11 @@ import { Appearance, loadStripe, Stripe, StripeElements, StripeError } from '@st
 import { environment } from '../../../environments/environment';
 import { ICartProduct } from '../interfaces/cart.interfaces';
 import { firstValueFrom } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { CartAdapter } from '../adapters/cart.adapter';
 import { IPaymentIntent } from '../interfaces/stripe.interfaces';
 import { IOrder } from '../interfaces/order.interfaces';
+import { SKIP_AUTH } from '../interceptors/auth-interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,9 @@ export class StripeService {
   private stripe: Stripe | null = null;
   private elements: StripeElements | null = null;
   private apiUrl = environment.stripeApiUrl;
+  private readonly opts = {
+    context: new HttpContext().set(SKIP_AUTH, true),
+  };
 
   private appearance: Appearance = {
     theme: 'flat',
@@ -39,15 +43,15 @@ export class StripeService {
       this.stripe = await loadStripe(environment.stripePublicKey);
     }
   }
-  async createPaymentIntent(
-    cart: ICartProduct,
-    clientSecretkey: string | null,
-  ): Promise<IPaymentIntent> {
+  async createPaymentIntent(cart: ICartProduct): Promise<IPaymentIntent> {
     return await firstValueFrom(
-      this._http.post<IPaymentIntent>(`${this.apiUrl}/payment-intent`, {
-        cart: CartAdapter.toAPI(cart),
-        clientSecretkey,
-      }),
+      this._http.post<IPaymentIntent>(
+        `${this.apiUrl}/payment-intent`,
+        {
+          cart: CartAdapter.toAPI(cart),
+        },
+        this.opts,
+      ),
     );
   }
 
@@ -63,6 +67,13 @@ export class StripeService {
     });
     const paymentElement = this.elements.create('payment', {
       layout: 'tabs',
+      fields: {
+        billingDetails: {
+          address: 'never',
+          email: 'never',
+          name: 'never',
+        },
+      },
     });
     paymentElement.mount('#payment-element');
   }
@@ -75,17 +86,17 @@ export class StripeService {
     });
   }
 
-  async updatePaymentWithOrder(
-    order: IOrder,
-    clientSecret: string | null,
-  ): Promise<{ success: boolean; message?: string }> {
+  async updatePaymentWithOrder(order: IOrder): Promise<{ success: boolean; message?: string }> {
     if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
     try {
       await firstValueFrom(
-        this._http.patch<void>(`${this.apiUrl}/payment-intent`, {
-          orderdata: order,
-          clientSecret,
-        }),
+        this._http.patch<void>(
+          `${this.apiUrl}/payment-intent`,
+          {
+            orderData: order,
+          },
+          this.opts,
+        ),
       );
       return { success: true };
     } catch (err) {
@@ -94,13 +105,9 @@ export class StripeService {
     }
   }
 
-  async cancelPaymentIntent(clientSecret: string) {
+  async cancelPaymentIntent() {
     if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
-    if (!clientSecret.includes('_secret')) throw new Error('clientSecret inválido');
-    const paymentIntentId = clientSecret.split('_secret')[0];
-    await firstValueFrom(
-      this._http.delete<void>(`${this.apiUrl}/payment-intent/${paymentIntentId}`),
-    );
+    await firstValueFrom(this._http.delete<void>(`${this.apiUrl}/payment-intent`, this.opts));
   }
 
   async destroyElements() {

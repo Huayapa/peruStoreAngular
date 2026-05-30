@@ -20,6 +20,7 @@ import { IPaymentIntent } from '../../../../core/interfaces/stripe.interfaces';
 import { CartProductsService } from '../../../../core/services/cart-products';
 import { StripeService } from '../../../../core/services/stripe';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
+import { CheckoutSessionService } from '../../../../core/services/checkout-session';
 
 @Component({
   selector: 'app-checkout',
@@ -39,6 +40,7 @@ import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deacti
   styleUrl: './checkout.scss',
 })
 export default class CheckoutPage extends FormDeactivateAbstract implements OnInit {
+  private readonly _checkoutSession = inject(CheckoutSessionService);
   private readonly _destroyRef = inject(DestroyRef);
   private readonly _stripe = inject(StripeService);
   private readonly _fb = inject(NonNullableFormBuilder);
@@ -48,7 +50,6 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   readonly loading = signal(false);
   readonly products = signal<ICartItems[]>([]);
   readonly pricetotal = signal(0);
-  readonly clientSecret = signal<string | null>(null);
 
   readonly form = this._fb.group({
     contact: this._fb.group({
@@ -87,7 +88,7 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   private async handleCartChange(cart: ICartProduct) {
     this.loading.set(true);
     try {
-      const intent = await this._stripe.createPaymentIntent(cart, this.clientSecret());
+      const intent = await this._stripe.createPaymentIntent(cart);
       this.applyPaymentIntent(intent);
     } catch (err) {
       await this.clearPaymentIntent();
@@ -98,22 +99,20 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   }
 
   private async clearPaymentIntent() {
-    const secret = this.clientSecret();
-    if (secret) {
-      try {
-        await this._stripe.cancelPaymentIntent(secret);
-        await this._stripe.destroyElements();
-        this.pricetotal.set(0);
-      } catch (err) {
-        console.error('Error al cancelar intent:', err);
-      }
+    try {
+      await this._stripe.cancelPaymentIntent();
+      await this._stripe.destroyElements();
+      this.pricetotal.set(0);
+    } catch (err) {
+      console.error('Error al cancelar intent:', err);
     }
-    this.clientSecret.set(null);
     this.products.set([]);
   }
 
-  private applyPaymentIntent({ clientSecret, products, price }: IPaymentIntent) {
-    this.clientSecret.set(clientSecret);
+  private applyPaymentIntent({ clientSecret, sessionToken, products, price }: IPaymentIntent) {
+    if (sessionToken) {
+      this._checkoutSession.setToken(sessionToken);
+    }
     this.products.set(products);
     this.pricetotal.set(price / 100);
     this._cart.updateCartItems(products);
@@ -128,7 +127,7 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
       400: 'El carrito está vacío o contiene datos inválidos.',
       0: 'Servicio no disponible. Por favor intente más tarde.',
     };
-    this.errorMessage.set(messages[err.status] ?? 'Error desconocido.');
+    this.errorMessage.set(messages[err.status] ?? err.message ?? 'Error desconocido.');
   }
 
   async pay(e: Event) {
@@ -141,10 +140,7 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
     const { contact, address } = this.form.getRawValue();
     const order = { ...contact, ...address };
 
-    const { success, message } = await this._stripe.updatePaymentWithOrder(
-      order,
-      this.clientSecret(),
-    );
+    const { success, message } = await this._stripe.updatePaymentWithOrder(order);
     if (!success) {
       this.errorMessage.set(message ?? 'No se logro actualizar los datos del orden');
       this.loading.set(false);

@@ -4,6 +4,7 @@ import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentSuccessDialog } from '../../components/payment-success-dialog/payment-success-dialog';
 import { CartProductsService } from '../../../../core/services/cart-products';
+import { CheckoutSessionService } from '../../../../core/services/checkout-session';
 
 @Component({
   selector: 'app-payment-success',
@@ -12,6 +13,7 @@ import { CartProductsService } from '../../../../core/services/cart-products';
   styles: ``,
 })
 export default class PaymentSuccessPage implements OnInit {
+  private readonly _checkoutSession = inject(CheckoutSessionService);
   private readonly _router = inject(Router);
   private readonly _routerActive = inject(ActivatedRoute);
   private readonly _cart = inject(CartProductsService);
@@ -22,6 +24,7 @@ export default class PaymentSuccessPage implements OnInit {
       this._router.navigate([APP_ROUTES.HOME.ROOT]).then(() => {
         this.viewSuccessPaymentDialog();
         this._cart.clearCart();
+        this._checkoutSession.removeToken();
       });
     } else {
       this._router.navigate([APP_ROUTES.CART.ROOT, APP_ROUTES.CART.CHECKOUT.ROOT], {

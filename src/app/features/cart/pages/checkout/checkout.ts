@@ -2,12 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  AbstractControl,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAnchor } from '@angular/material/button';
 import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
@@ -21,6 +16,7 @@ import { CartProductsService } from '../../../../core/services/cart-products';
 import { StripeService } from '../../../../core/services/stripe';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 import { CheckoutSessionService } from '../../../../core/services/checkout-session';
+import { getFormError } from '../../../../shared/helpers/form-field-error.helper';
 
 @Component({
   selector: 'app-checkout',
@@ -46,10 +42,13 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   private readonly _fb = inject(NonNullableFormBuilder);
   private readonly _routeActive = inject(ActivatedRoute);
   private readonly _cart = inject(CartProductsService);
+
   readonly errorMessage = signal('');
   readonly loading = signal(false);
   readonly products = signal<ICartItems[]>([]);
   readonly pricetotal = signal(0);
+
+  readonly getError = getFormError;
 
   readonly form = this._fb.group({
     contact: this._fb.group({
@@ -99,17 +98,11 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
   }
 
   private async clearPaymentIntent() {
-    try {
-      const token = this._checkoutSession.getToken();
-      if (token) {
-        await this._stripe.cancelPaymentIntent();
-      }
-      await this._stripe.destroyElements();
-      this._checkoutSession.removeToken();
-    } catch (err) {
-      this.handleError(err);
-      console.error('Error al cancelar intent:', err);
+    if (this._checkoutSession.getToken()) {
+      await this._stripe.cancelPaymentIntent();
     }
+    await this._stripe.destroyElements();
+    this._checkoutSession.removeToken();
     this.pricetotal.set(0);
     this.products.set([]);
   }
@@ -149,36 +142,26 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
     this.loading.set(true);
 
     const { contact, address } = this.form.getRawValue();
-    const order = { ...contact, ...address };
+    const { success, message } = await this._stripe.updatePaymentWithOrder({
+      ...contact,
+      ...address,
+    });
 
-    const { success, message } = await this._stripe.updatePaymentWithOrder(order);
     if (!success) {
       this.errorMessage.set(message ?? 'No se logro actualizar los datos del orden');
       this.loading.set(false);
       return;
     }
-    this.allowNavigation = true;
 
+    this.allowNavigation = true;
     const { error } = await this._stripe.confirmPayment(
       `${window.location.origin}/${APP_ROUTES.CART.ROOT}/${APP_ROUTES.CART.SUCCESS.ROOT}`,
     );
+
     if (error) {
       this.allowNavigation = false;
       this.errorMessage.set(error.message ?? 'Error desconocido');
-      this.loading.set(false);
-      return;
     }
-  }
-
-  getError(control: AbstractControl | null): string | null {
-    if (!control || !control.errors || !control.touched) return null;
-    if (control.hasError('required')) return 'Este campo es requerido';
-    if (control.hasError('minlength'))
-      return `No debe ser menor a ${control.errors['minlength'].requiredLength} caracteres`;
-    if (control.hasError('maxlength'))
-      return `No debe exceder a ${control.errors['maxlength'].requiredLength} caracteres`;
-    if (control.hasError('email')) return `Correo Inválido`;
-    if (control.hasError('pattern')) return `Formato Inválido`;
-    return null;
+    this.loading.set(false);
   }
 }

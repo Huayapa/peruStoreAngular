@@ -53,18 +53,15 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
 
   readonly form = this._fb.group({
     contact: this._fb.group({
-      name: ['josue', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
-      email: [
-        'huayapa@gmail.com',
-        [Validators.required, Validators.email, Validators.maxLength(100)],
-      ],
-      phone: ['13219331', [Validators.required, Validators.pattern(/^\+?[\d\s\-().]{7,15}$/)]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      phone: ['', [Validators.required, Validators.pattern(/^\+?[\d\s\-().]{7,15}$/)]],
     }),
     address: this._fb.group({
-      city: ['Lima', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      state: ['Lima', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       zipcode: [
-        '32453',
+        '',
         [
           Validators.required,
           Validators.minLength(2),
@@ -72,10 +69,7 @@ export default class CheckoutPage extends FormDeactivateAbstract implements OnIn
           Validators.pattern(/^[0-9]*$/),
         ],
       ],
-      address: [
-        'asd dasdas',
-        [Validators.required, Validators.minLength(5), Validators.maxLength(150)],
-      ],
+      address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(150)]],
     }),
     stripeReady: [false, Validators.requiredTrue],
   });

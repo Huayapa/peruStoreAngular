@@ -67,23 +67,25 @@ export class StripeService {
     });
     const paymentElement = this.elements.create('payment', {
       layout: 'tabs',
-      fields: {
-        billingDetails: {
-          address: 'never',
-          email: 'never',
-          name: 'never',
-        },
-      },
     });
     paymentElement.mount('#payment-element');
   }
 
   async confirmPayment(returnUrl: string): Promise<{ error?: StripeError }> {
     if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
-    return this.stripe.confirmPayment({
+    const result = await this.stripe.confirmPayment({
       elements: this.elements,
       confirmParams: { return_url: returnUrl },
     });
+    if (result.error) {
+      const isRecoverable =
+        result.error.type === 'card_error' || result.error.type === 'validation_error';
+
+      if (isRecoverable) {
+        await this.elements.fetchUpdates();
+      }
+    }
+    return result;
   }
 
   async updatePaymentWithOrder(order: IOrder): Promise<{ success: boolean; message?: string }> {
@@ -106,7 +108,6 @@ export class StripeService {
   }
 
   async cancelPaymentIntent() {
-    if (!this.stripe || !this.elements) throw new Error('Stripe not inicializado');
     await firstValueFrom(this._http.delete<void>(`${this.apiUrl}/payment-intent`, this.opts));
   }
 

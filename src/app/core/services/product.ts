@@ -6,6 +6,7 @@ import { IProduct } from '../../shared/interfaces/product.interface';
 import { IFilterProduct, IFilteredResult } from '../interfaces/product.interface';
 import { SKIP_AUTH } from '../interceptors/auth-interceptor';
 import { SKIP_SESSION } from '../interceptors/checkout-session-interceptor';
+import { HANDLE_CACHE_INTERCEPTOR } from '../interceptors/cache-interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,10 @@ export class ProductService {
   private readonly urlDomain = environment.apiUrl;
   private readonly http = inject(HttpClient);
   private readonly opts = {
-    context: new HttpContext().set(SKIP_AUTH, true).set(SKIP_SESSION, true),
+    context: new HttpContext()
+      .set(SKIP_AUTH, true)
+      .set(SKIP_SESSION, true)
+      .set(HANDLE_CACHE_INTERCEPTOR, true),
   };
   getProducts(): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(`${this.urlDomain}products`, this.opts);

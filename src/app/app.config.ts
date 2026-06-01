@@ -7,13 +7,19 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorApiInterceptorFn } from './core/interceptors/error-api-interceptor';
 import { authInterceptorFn } from './core/interceptors/auth-interceptor';
 import { checkoutSessionInterceptorFn } from './core/interceptors/checkout-session-interceptor';
+import { cacheInterceptorFn } from './core/interceptors/cache-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([errorApiInterceptorFn, authInterceptorFn, checkoutSessionInterceptorFn]),
+      withInterceptors([
+        errorApiInterceptorFn,
+        authInterceptorFn,
+        checkoutSessionInterceptorFn,
+        cacheInterceptorFn,
+      ]),
     ),
     provideLottieOptions({ player: () => import('lottie-web') }),
     provideCacheableAnimationLoader(),

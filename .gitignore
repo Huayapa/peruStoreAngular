@@ -43,5 +43,9 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
-# Extras
-/server
+# Server
+/server/.env
+/server/.env.*
+/server/node_modules
+/server/pnpm-lock.yaml
+/server/.http

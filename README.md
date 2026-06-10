@@ -1,6 +1,6 @@
 # PeruStore - Tienda E-commerce en Angular
 
-Aplicación de e-commerce moderna desarrollada con Angular 21 y TypeScript. Implementa autenticación JWT, integración con Stripe para procesamiento de pagos, carrito de compras persistente y arquitectura escalable siguiendo mejores prácticas del desarrollo frontend.
+Aplicación de e-commerce moderna desarrollada con Angular 21 y TypeScript. Implementa autenticación JWT, integración con Stripe para procesamiento de pagos, carrito de compras persistente y arquitectura escalable siguiendo mejores prácticas del desarrollo frontend y backend.
 
 ---
 
@@ -9,10 +9,12 @@ Aplicación de e-commerce moderna desarrollada con Angular 21 y TypeScript. Impl
 - [Características](#características)
 - [Tecnologías](#tecnologías)
 - [Requisitos](#requisitos)
+- [Instalación](#instalación)
 - [Ejecución](#ejecución)
 - [Estructura](#estructura-del-proyecto)
 - [Arquitectura](#arquitectura)
 - [Servicios](#servicios-principales)
+- [API Backend](#api-backend)
 
 ---
 
@@ -34,6 +36,9 @@ Autenticación y Seguridad:
 - Interceptores HTTP para tokens e manejo de errores
 - Validación de entrada y sanitización de datos
 - Guardias de ruta personalizadas
+- Rate limiting en servidor
+- CORS configurado
+- Validación de sesiones
 
 Experiencia de Usuario:
 
@@ -54,27 +59,37 @@ Optimizaciones:
 
 ## Tecnologías
 
-| Tecnología       | Versión | Descripción            |
-| ---------------- | ------- | ---------------------- |
-| Angular          | 21.1    | Framework principal    |
-| TypeScript       | 5.6     | Lenguaje tipado        |
-| Angular Material | 21.x    | Componentes UI         |
-| RxJS             | 7.x     | Programación reactiva  |
-| Stripe.js        | Latest  | Procesamiento de pagos |
-| Lottie           | 1.x     | Animaciones            |
-| SCSS             | 5.x     | Estilos                |
-| Prettier         | Latest  | Formateador de código  |
-| ESLint           | Latest  | Linting                |
-| Vitest           | Latest  | Testing framework      |
+| Tecnología       | Versión | Descripción               |
+| ---------------- | ------- | ------------------------- |
+| Angular          | 21.1    | Framework principal       |
+| TypeScript       | 5.6     | Lenguaje tipado           |
+| Angular Material | 21.x    | Componentes UI            |
+| RxJS             | 7.x     | Programación reactiva     |
+| Node.js          | 20+     | Runtime backend           |
+| Express.js       | 4.x     | Framework servidor        |
+| Stripe.js        | Latest  | Procesamiento de pagos    |
+| Stripe Node      | Latest  | Servidor de pagos backend |
+| Lottie           | 1.x     | Animaciones               |
+| SCSS             | 5.x     | Estilos                   |
+| Prettier         | Latest  | Formateador de código     |
+| ESLint           | Latest  | Linting                   |
+| Vitest           | Latest  | Testing framework         |
 
 ---
 
 ## Requisitos
 
+**Frontend:**
+
 - Node.js v20 o superior
 - npm v11 o superior
 - Angular CLI v21.1+
-- Git
+
+**Backend:**
+
+- Node.js v20 o superior
+- npm o pnpm
+- Clave API de Stripe (https://stripe.com)
 
 Verificar instalación:
 
@@ -86,25 +101,92 @@ ng version
 
 ---
 
+## Instalación
+
+**1. Clonar repositorio:**
+
+```bash
+git clone <repository-url>
+cd peruStoreAngular
+```
+
+**2. Instalar dependencias Frontend:**
+
+```bash
+npm install
+```
+
+**3. Instalar dependencias Backend:**
+
+```bash
+cd server
+npm install
+# o con pnpm
+pnpm install
+cd ..
+```
+
+**4. Configurar variables de entorno:**
+
+Crear archivo `server/.env`:
+
+```env
+PORT=3000
+STRIPE_SECRET_KEY=sk_test_your_key_here
+STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
+FRONTEND_URL=http://localhost:4200
+NODE_ENV=development
+```
+
+Crear archivo `src/environments/environment.ts`:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000',
+  stripePublicKey: 'pk_test_your_key_here',
+};
+```
+
+---
+
 ## Ejecución
 
-Iniciar servidor de desarrollo:
+**Opción 1: Ejecutar ambos en paralelo (recomendado):**
+
+Terminal 1 - Backend:
+
+```bash
+cd server
+npm start
+```
+
+Backend disponible en: http://localhost:3000/
+
+Terminal 2 - Frontend:
 
 ```bash
 npm start
 ```
 
-Acceder a: http://localhost:4200/
+Frontend disponible en: http://localhost:4200/
 
-Credenciales de prueba:
+**Credenciales de prueba:**
 
 - Usuario: mor_2314
 - Contraseña: 83r5^\_
+
+**Opción 2: Solo Frontend (usando FakeStore API):**
+
+```bash
+npm start
+```
 
 Build para producción:
 
 ```bash
 npm run build
+npm run build --configuration production
 ```
 
 Los archivos compilados se guardan en dist/peru-store-angular/
@@ -139,6 +221,30 @@ peru-store-angular/
 │   ├── environments/             # Variables de entorno
 │   ├── styles/                   # Estilos globales SCSS
 │   └── main.ts                   # Punto de entrada
+├── server/                       # Backend Node.js/Express
+│   ├── config/                   # Configuración
+│   │   └── env.js                # Variables de entorno
+│   ├── controllers/              # Controladores de lógica
+│   │   ├── stripe.payment-intent.controller.js
+│   │   └── stripe.webhook.controller.js
+│   ├── middleware/               # Middlewares
+│   │   ├── cors.middleware.js
+│   │   ├── rate-limit.middleware.js
+│   │   ├── security.middleware.js
+│   │   └── validate-session.middleware.js
+│   ├── routes/                   # Definición de rutas
+│   │   ├── index.routes.js
+│   │   └── stripe/
+│   │       └── stripe.routes.js
+│   ├── services/                 # Lógica de negocio
+│   │   ├── cart.service.js
+│   │   ├── checkoutSession.service.js
+│   │   ├── order.service.js
+│   │   └── stripe.service.js
+│   ├── server.js                 # Punto de entrada
+│   ├── .env                      # Variables de entorno
+│   ├── package.json
+│   └── pnpm-lock.yaml
 ├── public/                       # Recursos estáticos
 │   ├── image/                    # Imágenes
 │   └── animations/               # Animaciones Lottie
@@ -153,32 +259,43 @@ peru-store-angular/
 
 ## Arquitectura
 
-Patrón de arquitectura modular y escalable:
+Arquitectura full-stack modular y escalable:
 
 ```
-COMPONENTES (UI)
+FRONTEND (Angular 21)
     ↓
-SERVICIOS (Lógica de negocio)
+COMPONENTES ← SERVICIOS
+    ↓           ↓
+INTERCEPTORES → HTTP CALLS
     ↓
-INTERCEPTORES Y GUARDIAS (Seguridad)
+BACKEND (Node.js/Express)
     ↓
-API EXTERNA (FakeStore API, Stripe)
+MIDDLEWARES (CORS, Rate Limit, Security)
+    ↓
+RUTAS → CONTROLADORES → SERVICIOS
+    ↓
+APIs EXTERNAS (Stripe, FakeStore API)
 ```
 
-Flujo de datos:
+**Flujo de datos completo:**
 
-1. Componentes solicitan datos a través de Servicios
-2. Servicios hacen llamadas HTTP
-3. Interceptores inyectan tokens y manejan errores
-4. Guardias validan acceso a rutas
-5. Adaptadores transforman datos de API
-6. Signals actualizan la UI reactivamente
+1. Usuario interactúa con componentes Angular
+2. Componentes solicitan datos a Servicios
+3. Servicios realizan llamadas HTTP con interceptores
+4. Interceptores inyectan tokens JWT
+5. Backend recibe petición en rutas/controladores
+6. Controladores validan sesión y aplican middlewares
+7. Servicios backend procesan lógica (Stripe, órdenes)
+8. Respuesta regresa al frontend con Signals reactivos
+9. UI se actualiza automáticamente
 
 ---
 
 ## Servicios Principales
 
-AuthService - Autenticación con JWT:
+### Frontend
+
+**AuthService** - Autenticación con JWT:
 
 ```typescript
 login(credentials): Observable<{ token: string }>
@@ -189,7 +306,7 @@ getUserName(): string
 getUserId(): number
 ```
 
-ProductService - Gestión de productos:
+**ProductService** - Gestión de productos:
 
 ```typescript
 getProducts(): Observable<IProduct[]>
@@ -198,7 +315,7 @@ getFilteredProducts(filters): Observable<IFilteredResult>
 getCategory(): Observable<string[]>
 ```
 
-CartProductsService - Carrito de compras:
+**CartProductsService** - Carrito de compras:
 
 ```typescript
 addProductToCart(prod): void
@@ -210,13 +327,74 @@ totalPrice$: Observable<number>
 totalItem$: Observable<number>
 ```
 
-StripeService - Integración de pagos:
+**StripeService** - Integración de pagos:
 
 ```typescript
 init(): Promise<void>
 createPaymentIntent(cart): Promise<IPaymentIntent>
 confirmPayment(returnUrl): Promise<{ error? }>
 ```
+
+### Backend
+
+**StripeService** - Procesamiento de pagos:
+
+- Crear payment intents
+- Procesar webhooks de Stripe
+- Validar transacciones
+
+**OrderService** - Gestión de órdenes:
+
+- Crear órdenes desde carrito
+- Guardar historial de compras
+- Consultar estado de órdenes
+
+**CartService** - Validación de carrito:
+
+- Validar productos y cantidades
+- Calcular totales
+- Aplicar descuentos
+
+**CheckoutSessionService** - Sesiones de checkout:
+
+- Crear y validar sesiones
+- Mantener estado de checkout
+
+---
+
+## API Backend
+
+Base URL: `http://localhost:3000`
+
+### Stripe Endpoints
+
+**POST** `/api/stripe/payment-intent`
+
+Crear intent de pago:
+
+```json
+Body: {
+  "amount": 10000,
+  "currency": "usd",
+  "metadata": { "orderId": "123" }
+}
+
+Response: {
+  "clientSecret": "pi_xxx_secret_xxx",
+  "id": "pi_xxx"
+}
+```
+
+**POST** `/api/stripe/webhook`
+
+Webhook de eventos de Stripe (procesado automáticamente)
+
+### Middlewares
+
+- **CORS** - Control de origen cruzado
+- **Rate Limiting** - Máximo 100 requests/15min
+- **Security** - Headers de seguridad
+- **Session Validation** - Verificación de sesión activa
 
 ---
 
@@ -233,4 +411,3 @@ Josue huayapa julca
 - GitHub: @Huayapa
 - LinkedIn: [Josue huayapa](www.linkedin.com/in/josue-huayapa-630a19316)
 - Portfolio: [huayapadev](https://portafolio-huayapa.vercel.app)
-

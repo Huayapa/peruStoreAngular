@@ -49,3 +49,7 @@ Thumbs.db
 /server/node_modules
 /server/pnpm-lock.yaml
 /server/.http
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

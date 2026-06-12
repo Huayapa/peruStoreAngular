@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 import { CartProductsService } from '../../../../core/services/cart-products';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
-import { finalize } from 'rxjs';
+import { catchError, EMPTY, finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -57,6 +57,10 @@ export default class LoginPage extends FormDeactivateAbstract {
     this._auth
       .login(this.form.getRawValue())
       .pipe(
+        catchError((err: Error) => {
+          this._snackBar.open(err.message, 'Cerrar');
+          return EMPTY;
+        }),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
@@ -91,7 +95,7 @@ export default class LoginPage extends FormDeactivateAbstract {
       this._cartProduct.loadUserCart();
     }
     this.allowNavigation = true;
-    this.form.reset();
+    this.form.reset({ username: '', password: '' });
     this.openSnackBar();
     this._router.navigate([APP_ROUTES.HOME.ROOT]);
   }

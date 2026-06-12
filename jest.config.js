@@ -1,4 +1,5 @@
 module.exports = {
+  clearMocks: true,
 	preset: 'jest-preset-angular',
 	setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
 	testPathIgnorePatterns: [

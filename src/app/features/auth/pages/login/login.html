@@ -2,7 +2,7 @@
   <section class="login__main">
     <h1 class="login__title">Iniciar Sesión</h1>
     @if (isLoading()) {
-      <mat-spinner></mat-spinner>
+      <mat-spinner role="progressbar"></mat-spinner>
     } @else {
       <form class="login__form" [formGroup]="form">
         <mat-form-field appearance="outline" class="login__field">

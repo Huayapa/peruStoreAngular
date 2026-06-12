@@ -38,6 +38,9 @@ module.exports = defineConfig([
   },
   {
     files: ['**/*.spec.ts', '**/*.test.ts'],
+    extends: [
+      tseslint.configs.recommended
+    ],
     plugins: { jest, 'testing-library': testingLibrary },
     rules: {
       ...jest.configs.recommended.rules,

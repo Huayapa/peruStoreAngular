@@ -77,7 +77,7 @@ export default class RegisterPage extends FormDeactivateAbstract {
       .subscribe({
         next: () => {
           this.allowNavigation = true;
-          this.form.reset();
+          this.form.reset({ username: '', email: '', password: '', repeatpassword: '' });
           this.isLoading.set(false);
           this.openSnackBar();
           this._router.navigate([APP_ROUTES.AUTH.ROOT, APP_ROUTES.AUTH.LOGIN.ROOT]);

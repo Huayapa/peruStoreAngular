@@ -10,7 +10,7 @@
           <input matInput formControlName="username" placeholder="Ingresa Usuario" />
           <mat-icon matSuffix>person</mat-icon>
           @if (form.controls.username.hasError('required')) {
-            <mat-error>El usuario es requerido</mat-error>
+            <mat-error data-testid="required-user-error">El usuario es requerido</mat-error>
           }
         </mat-form-field>
 
@@ -19,10 +19,10 @@
           <input matInput formControlName="email" placeholder="Ingresa un correo" />
           <mat-icon matSuffix>mail</mat-icon>
           @if (form.controls.email.hasError('required')) {
-            <mat-error>El correo es requerido</mat-error>
+            <mat-error data-testid="required-email-error">El correo es requerido</mat-error>
           }
           @if (form.controls.email.hasError('email')) {
-            <mat-error>Debe cumplir el formato de correo</mat-error>
+            <mat-error data-testid="valid-email-error">Debe cumplir el formato de correo</mat-error>
           }
         </mat-form-field>
 
@@ -38,10 +38,12 @@
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           @if (form.controls.password.hasError('required')) {
-            <mat-error>La contraseña es requerida</mat-error>
+            <mat-error data-testid="required-password-error">La contraseña es requerida</mat-error>
           }
           @if (form.controls.password.hasError('minlength')) {
-            <mat-error>Debe ser mayor a 8 caracteres</mat-error>
+            <mat-error data-testid="max-eight-password-error"
+              >Debe ser mayor a 8 caracteres</mat-error
+            >
           }
         </mat-form-field>
 
@@ -60,10 +62,14 @@
             />
             <mat-icon matSuffix>password</mat-icon>
             @if (form.controls.password.hasError('required')) {
-              <mat-error>La contraseña es requerida</mat-error>
+              <mat-error data-testid="required-password-error"
+                >La contraseña es requerida</mat-error
+              >
             }
             @if (form.hasError('customValidationPassword')) {
-              <mat-error>La contraseña debe coincidir</mat-error>
+              <mat-error data-testid="required-repeatpassword-error"
+                >La contraseña debe coincidir</mat-error
+              >
             }
           </mat-form-field>
         </div>

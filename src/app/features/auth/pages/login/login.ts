@@ -1,19 +1,19 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { MatFormField, MatLabel, MatSuffix, MatError } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { MatIcon } from '@angular/material/icon';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatIconButton, MatAnchor } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
-import { APP_ROUTES } from '../../../../core/constants/app-routes';
-import { AuthService } from '../../../../core/services/auth';
+import { MatAnchor, MatIconButton } from '@angular/material/button';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
-import { CartProductsService } from '../../../../core/services/cart-products';
-import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
+import { Router, RouterLink } from '@angular/router';
 import { catchError, EMPTY, finalize } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { CartProductsService } from '../../../../core/services/cart-products';
+import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
+import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-login',

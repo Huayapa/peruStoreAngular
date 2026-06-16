@@ -1,17 +1,17 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { SKIP_AUTH } from '../../interceptors/auth-interceptor';
+import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
+import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor';
 import {
-  IAuthStorage,
   IAuthRequest,
+  IAuthStorage,
   IRegisterRequest,
   IRegisterResponse,
-} from '../interfaces/auth.interfaces';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { HANDLE_HTTP_INTERCEPTOR } from '../interceptors/error-api-interceptor';
-import { SKIP_AUTH } from '../interceptors/auth-interceptor';
-import { SKIP_SESSION } from '../interceptors/checkout-session-interceptor';
+} from '../../interfaces/auth.interfaces';
 
 @Injectable({
   providedIn: 'root',

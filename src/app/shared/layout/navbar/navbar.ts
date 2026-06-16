@@ -1,18 +1,17 @@
 import { Component, DestroyRef, HostListener, inject, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterModule } from '@angular/router';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
-import { Sidebar } from '../sidebar/sidebar';
-import { Sidecart } from '../sidecart/sidecart';
+import { AuthService } from '../../../core/services/auth/auth';
+import { CartProductsService } from '../../../core/services/cart-products';
 import { SidenavService } from '../../../core/services/sidenav';
 import { SearchBar } from '../../components/search-bar/search-bar';
-import { CartProductsService } from '../../../core/services/cart-products';
-import { MatBadgeModule } from '@angular/material/badge';
-import { AuthService } from '../../../core/services/auth';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { Sidebar } from '../sidebar/sidebar';
+import { Sidecart } from '../sidecart/sidecart';
 
 @Component({
   selector: 'app-navbar',

@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth';
-import { APP_ROUTES } from '../constants/app-routes';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CanActivateFn, Router } from '@angular/router';
+import { APP_ROUTES } from '../constants/app-routes';
+import { AuthService } from '../services/auth/auth';
 
 export const publicGuard: CanActivateFn = () => {
   const auth = inject(AuthService);

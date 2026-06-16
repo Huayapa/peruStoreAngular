@@ -1,21 +1,21 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatIconButton, MatAnchor } from '@angular/material/button';
-import { MatFormField, MatLabel, MatSuffix, MatError } from '@angular/material/form-field';
+import { MatAnchor, MatIconButton } from '@angular/material/button';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AuthService } from '../../../../core/services/auth';
 import { IRegisterRequest } from '../../../../core/interfaces/auth.interfaces';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 import {
   crossPasswordCustomValidation,
   PasswordStateMatcher,
 } from '../../validators/cross-password.validator';
-import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',

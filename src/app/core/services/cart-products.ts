@@ -1,5 +1,5 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { AuthService } from './auth';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
   catchError,
@@ -10,12 +10,12 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { ICartItems, ICartProduct, ICartResponse } from '../interfaces/cart.interfaces';
 import { IProduct } from '../../shared/interfaces/product.interface';
-import { CartApiService } from './cart-api';
 import { CartAdapter } from '../adapters/cart.adapter';
+import { ICartItems, ICartProduct, ICartResponse } from '../interfaces/cart.interfaces';
+import { AuthService } from './auth/auth';
+import { CartApiService } from './cart-api';
 import { ProductService } from './product';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',

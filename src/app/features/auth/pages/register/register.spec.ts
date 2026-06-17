@@ -2,7 +2,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import RegisterPage from './register';
 import { provideRouter, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../../../core/services/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatLabel, MatError } from '@angular/material/form-field';
@@ -11,6 +10,7 @@ import { MatInput } from '@angular/material/input';
 import { of, Subject, throwError } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { AuthService } from '../../../../core/services/auth/auth';
 
 const mockSnackBar = { open: jest.fn() };
 const mockAuthService = { register: jest.fn() };

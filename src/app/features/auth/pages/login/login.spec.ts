@@ -4,7 +4,6 @@ import LoginPage from './login';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatError, MatInput, MatLabel } from '@angular/material/input';
-import { AuthService } from '../../../../core/services/auth';
 import { of, Subject, throwError } from 'rxjs';
 import { CartProductsService } from '../../../../core/services/cart-products';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { provideRouter, Router } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { AuthService } from '../../../../core/services/auth/auth';
 
 const mockAuthService = { login: jest.fn() };
 const mockCartService = { getCartStorage: jest.fn(), loadUserCart: jest.fn() };

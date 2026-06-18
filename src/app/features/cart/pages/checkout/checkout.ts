@@ -13,9 +13,9 @@ import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { ICartItems, ICartProduct } from '../../../../core/interfaces/cart.interfaces';
 import { IPaymentIntent } from '../../../../core/interfaces/stripe.interfaces';
 import { CartProductsService } from '../../../../core/services/cart-products';
+import { CheckoutSessionService } from '../../../../core/services/checkout/checkout-session';
 import { StripeService } from '../../../../core/services/stripe';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
-import { CheckoutSessionService } from '../../../../core/services/checkout-session';
 import { getFormError } from '../../../../shared/helpers/form-field-error.helper';
 
 @Component({

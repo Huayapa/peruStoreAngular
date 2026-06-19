@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { ISlide } from '../../interfaces/slider.interface';
-import { Slider } from '../../components/slider/slider';
-import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
-import { ProductService } from '../../../../core/services/product';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ProductService } from '../../../../core/services/product/product';
+import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
 import { Categories } from '../../components/categories/categories';
+import { Slider } from '../../components/slider/slider';
+import { ISlide } from '../../interfaces/slider.interface';
 
 @Component({
   selector: 'app-home',

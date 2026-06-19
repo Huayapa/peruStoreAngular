@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
-import { ProductService } from '../../../core/services/product';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, startWith, switchMap } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { debounceTime, startWith, switchMap } from 'rxjs';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
+import { ProductService } from '../../../core/services/product/product';
 
 @Component({
   selector: 'app-search-bar',

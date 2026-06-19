@@ -1,14 +1,14 @@
 import { Component, computed, inject, signal, untracked } from '@angular/core';
-import { BannerSection } from '../../../home/components/banner-section/banner-section';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
-import { ShopFilter } from '../../components/shop-filter/shop-filter';
-import { ShopProducts } from '../../components/shop-products/shop-products';
-import { ShopPagination } from '../../components/shop-pagination/shop-pagination';
-import { ProductService } from '../../../../core/services/product';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { IFilterProduct } from '../../../../core/interfaces/product.interface';
+import { ProductService } from '../../../../core/services/product/product';
+import { BannerSection } from '../../../home/components/banner-section/banner-section';
+import { ShopFilter } from '../../components/shop-filter/shop-filter';
+import { ShopPagination } from '../../components/shop-pagination/shop-pagination';
+import { ShopProducts } from '../../components/shop-products/shop-products';
 
 @Component({
   selector: 'app-shop',

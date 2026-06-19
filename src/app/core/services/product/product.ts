@@ -1,12 +1,12 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
-import { IProduct } from '../../shared/interfaces/product.interface';
-import { IFilterProduct, IFilteredResult } from '../interfaces/product.interface';
-import { SKIP_AUTH } from '../interceptors/auth-interceptor';
-import { SKIP_SESSION } from '../interceptors/checkout-session-interceptor';
-import { HANDLE_CACHE_INTERCEPTOR } from '../interceptors/cache-interceptor';
+import { environment } from '../../../../environments/environment';
+import { IProduct } from '../../../shared/interfaces/product.interface';
+import { SKIP_AUTH } from '../../interceptors/auth-interceptor';
+import { HANDLE_CACHE_INTERCEPTOR } from '../../interceptors/cache-interceptor';
+import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
+import { IFilteredResult, IFilterProduct } from '../../interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root',

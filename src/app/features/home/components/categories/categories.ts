@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ProductService } from '../../../../core/services/product';
 import { RouterLink } from '@angular/router';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { ProductService } from '../../../../core/services/product/product';
 
 @Component({
   selector: 'app-categories',

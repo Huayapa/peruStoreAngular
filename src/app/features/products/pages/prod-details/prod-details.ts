@@ -1,15 +1,15 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, EMPTY, filter, map, switchMap, tap } from 'rxjs';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
-import { ProductService } from '../../../../core/services/product';
-import { IProduct } from '../../../../shared/interfaces/product.interface';
-import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
-import { CurrencyPipe } from '@angular/common';
-import { MatFabButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 import { CartProductsService } from '../../../../core/services/cart-products';
+import { ProductService } from '../../../../core/services/product/product';
+import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
+import { IProduct } from '../../../../shared/interfaces/product.interface';
 
 @Component({
   selector: 'app-prod-details',

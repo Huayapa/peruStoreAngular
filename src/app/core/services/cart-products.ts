@@ -14,7 +14,7 @@ import { IProduct } from '../../shared/interfaces/product.interface';
 import { CartAdapter } from '../adapters/cart.adapter';
 import { ICartItems, ICartProduct, ICartResponse } from '../interfaces/cart.interfaces';
 import { AuthService } from './auth/auth';
-import { CartApiService } from './cart-api';
+import { CartApiService } from './cart-api/cart-api';
 import { ProductService } from './product';
 
 @Injectable({

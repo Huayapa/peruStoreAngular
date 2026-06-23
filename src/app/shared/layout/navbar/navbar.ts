@@ -7,11 +7,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterModule } from '@angular/router';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
 import { AuthService } from '../../../core/services/auth/auth';
-import { CartProductsService } from '../../../core/services/cart-products';
 import { SidenavService } from '../../../core/services/sidenav';
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Sidecart } from '../sidecart/sidecart';
+import { CartProductsService } from '../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-navbar',

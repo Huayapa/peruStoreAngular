@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
-import { CartProductsService } from '../../../../core/services/cart-products';
 import { CheckoutSessionService } from '../../../../core/services/checkout/checkout-session';
 import { PaymentSuccessDialog } from '../../components/payment-success-dialog/payment-success-dialog';
+import { CartProductsService } from '../../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-payment-success',

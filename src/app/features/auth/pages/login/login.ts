@@ -11,9 +11,9 @@ import { Router, RouterLink } from '@angular/router';
 import { catchError, EMPTY, finalize } from 'rxjs';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
 import { AuthService } from '../../../../core/services/auth/auth';
-import { CartProductsService } from '../../../../core/services/cart-products';
 import { FormDeactivateAbstract } from '../../../../shared/abstracts/form-deactivate.abstract';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
+import { CartProductsService } from '../../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-login',

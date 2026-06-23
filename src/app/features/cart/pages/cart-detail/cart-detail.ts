@@ -1,6 +1,5 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { MatAnchor, MatMiniFabButton } from '@angular/material/button';
-import { CartProductsService } from '../../../../core/services/cart-products';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatIcon } from '@angular/material/icon';
 import { CurrencyPipe } from '@angular/common';
@@ -8,6 +7,7 @@ import { IProduct } from '../../../../shared/interfaces/product.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
+import { CartProductsService } from '../../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-cart-detail',

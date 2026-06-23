@@ -6,10 +6,10 @@ import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, EMPTY, filter, map, switchMap, tap } from 'rxjs';
 import { APP_ROUTES } from '../../../../core/constants/app-routes';
-import { CartProductsService } from '../../../../core/services/cart-products';
 import { ProductService } from '../../../../core/services/product/product';
 import { SliderProducts } from '../../../../shared/components/slider-products/slider-products';
 import { IProduct } from '../../../../shared/interfaces/product.interface';
+import { CartProductsService } from '../../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-prod-details',

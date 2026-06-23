@@ -2,13 +2,13 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { SidenavService } from '../../../core/services/sidenav';
 import { MatIconButton, MatAnchor } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { CartProductsService } from '../../../core/services/cart-products';
 import { ICartProduct } from '../../../core/interfaces/cart.interfaces';
 import { IProduct } from '../../interfaces/product.interface';
 import { RouterLink } from '@angular/router';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
 import { CurrencyPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CartProductsService } from '../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-sidecart',

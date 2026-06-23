@@ -11,8 +11,8 @@ import { IProduct } from '../../interfaces/product.interface';
 import { MatFabButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { APP_ROUTES } from '../../../core/constants/app-routes';
-import { CartProductsService } from '../../../core/services/cart-products';
 import { CurrencyPipe } from '@angular/common';
+import { CartProductsService } from '../../../core/services/cart-products/cart-products';
 
 @Component({
   selector: 'app-card-product',

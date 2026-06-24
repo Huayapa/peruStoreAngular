@@ -9,7 +9,10 @@ import { GuardResult } from '@angular/router';
 
 @Component({ template: '' })
 class TestComponent extends FormDeactivateAbstract {
-  form = new FormGroup({ name: new FormControl('') });
+  form = new FormGroup({
+    name: new FormControl(''),
+    address: new FormControl({ street: '', city: '' }),
+  });
 }
 
 describe('FormDeactiveAbstract', () => {
@@ -54,6 +57,14 @@ describe('FormDeactiveAbstract', () => {
     });
     it('should return true immediately if the form has no changes', () => {
       expect(component.canDeactivate()).toBe(true);
+    });
+    it('should open dialog when nested form control has changes', () => {
+      component.form.get('address')?.setValue({ street: 'Calle 123', city: '' });
+      jest.spyOn(dialog, 'open').mockReturnValue({
+        afterClosed: () => of(true),
+      } as MatDialogRef<ConfirmDialog>);
+      component.canDeactivate();
+      expect(dialog.open).toHaveBeenCalled();
     });
     it('should show dialog when allowNavigation is false and the form has changes', () => {
       component.form.get('name')?.setValue('test');

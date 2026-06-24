@@ -121,6 +121,21 @@ describe('CartProductsService', () => {
       });
     });
     describe('update product', () => {
+      it('should increment the quantity if the product exist', async () => {
+        jest.spyOn(service, 'getCartStorage').mockReturnValue({
+          id: 0,
+          userId: 1,
+          products: [
+            { product: mockProduct, quantity: 1 },
+            { product: { ...mockProduct, id: 2 }, quantity: 4 },
+          ],
+        });
+        service.addProductToCart(mockProduct);
+        const cart = await firstValueFrom(service.cartproduct$);
+        expect(cart.products.length).toBe(2);
+        expect(cart.products[0].quantity).toBe(2);
+        expect(cart.products[1].quantity).toBe(4);
+      });
       it('should emit the cart with the updated product', async () => {
         service.addProductToCart(mockProduct);
         service.addProductToCart(mockProduct);
@@ -164,6 +179,21 @@ describe('CartProductsService', () => {
       const spy = jest.spyOn(service, 'getCartStorage');
       service.updateStock(1, 0);
       expect(spy).not.toHaveBeenCalled();
+    });
+    it('should change the new quantity when the product exists', async () => {
+      jest.spyOn(service, 'getCartStorage').mockReturnValue({
+        id: 0,
+        userId: 1,
+        products: [
+          { product: mockProduct, quantity: 1 },
+          { product: { ...mockProduct, id: 2 }, quantity: 4 },
+        ],
+      });
+      service.updateStock(2, 6);
+      const cart = await firstValueFrom(service.cartproduct$);
+      expect(cart.products.length).toBe(2);
+      expect(cart.products[0].quantity).toBe(1);
+      expect(cart.products[1].quantity).toBe(6);
     });
     it('should not call the API when the stock is less than 1', () => {
       service.updateStock(1, 0);
@@ -286,6 +316,18 @@ describe('CartProductsService', () => {
       mockAuthService.getUserId.mockReturnValue(0);
       service.loadUserCart();
       expect(mockCartAPIService.getCart).not.toHaveBeenCalled();
+    });
+    it('should return array empty if not exists products', async () => {
+      const mockCartResponse: ICartResponse = {
+        id: 1,
+        userId: 1,
+        products: [],
+      };
+      mockAuthService.getUserId.mockReturnValue(1);
+      mockCartAPIService.getCart.mockReturnValue(of(mockCartResponse));
+      service.loadUserCart();
+      const cart = await firstValueFrom(service.cartproduct$);
+      expect(cart).toEqual(mockCartResponse);
     });
     it('should emit the resolved cart if the userId is valid', async () => {
       const mockCartResponse: ICartResponse = {

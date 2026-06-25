@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { ProductService } from './product';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
 import { IProduct } from '../../../shared/interfaces/product.interface';
 import { SKIP_AUTH } from '../../interceptors/auth-interceptor';
-import { HANDLE_CACHE_INTERCEPTOR } from '../../interceptors/cache-interceptor';
+import { HANDLE_CACHE_INTERCEPTOR } from '../../interceptors/cache-interceptor/cache-interceptor';
 import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
-import { firstValueFrom } from 'rxjs';
+import { ProductService } from './product';
 
 describe('ProductService', () => {
   let service: ProductService;

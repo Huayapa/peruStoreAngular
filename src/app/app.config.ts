@@ -7,7 +7,7 @@ import { routes } from './app.routes';
 import { authInterceptorFn } from './core/interceptors/auth-interceptor/auth-interceptor';
 import { cacheInterceptorFn } from './core/interceptors/cache-interceptor/cache-interceptor';
 import { checkoutSessionInterceptorFn } from './core/interceptors/checkout-session-interceptor';
-import { errorApiInterceptorFn } from './core/interceptors/error-api-interceptor';
+import { errorApiInterceptorFn } from './core/interceptors/error-api-interceptor/error-api-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

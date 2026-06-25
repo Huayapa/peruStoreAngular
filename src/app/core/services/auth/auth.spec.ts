@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
-import { AuthService } from './auth';
 import {
-  provideHttpClientTesting,
   HttpTestingController,
+  provideHttpClientTesting,
   TestRequest,
 } from '@angular/common/http/testing';
-import { IAuthStorage, IRegisterResponse } from '../../interfaces/auth.interfaces';
-import { firstValueFrom } from 'rxjs';
-import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor';
-import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
+import { TestBed } from '@angular/core/testing';
 import { jwtDecode } from 'jwt-decode';
+import { firstValueFrom } from 'rxjs';
 import { SKIP_AUTH } from '../../interceptors/auth-interceptor/auth-interceptor';
+import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
+import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor/error-api-interceptor';
+import { IAuthStorage, IRegisterResponse } from '../../interfaces/auth.interfaces';
+import { AuthService } from './auth';
 
 jest.mock('jwt-decode');
 

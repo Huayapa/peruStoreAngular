@@ -3,15 +3,15 @@ import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { SKIP_AUTH } from '../../interceptors/auth-interceptor/auth-interceptor';
 import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
-import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor';
+import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor/error-api-interceptor';
 import {
   IAuthRequest,
   IAuthStorage,
   IRegisterRequest,
   IRegisterResponse,
 } from '../../interfaces/auth.interfaces';
-import { SKIP_AUTH } from '../../interceptors/auth-interceptor/auth-interceptor';
 
 @Injectable({
   providedIn: 'root',

@@ -5,9 +5,9 @@ import { provideCacheableAnimationLoader, provideLottieOptions } from 'ngx-lotti
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorApiInterceptorFn } from './core/interceptors/error-api-interceptor';
-import { authInterceptorFn } from './core/interceptors/auth-interceptor';
 import { checkoutSessionInterceptorFn } from './core/interceptors/checkout-session-interceptor';
 import { cacheInterceptorFn } from './core/interceptors/cache-interceptor';
+import { authInterceptorFn } from './core/interceptors/auth-interceptor/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

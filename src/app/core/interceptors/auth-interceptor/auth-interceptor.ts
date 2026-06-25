@@ -1,6 +1,6 @@
 import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth/auth';
+import { AuthService } from '../../services/auth/auth';
 
 export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
 

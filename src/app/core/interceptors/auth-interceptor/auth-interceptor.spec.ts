@@ -2,7 +2,7 @@ import { HttpClient, HttpContext, provideHttpClient, withInterceptors } from '@a
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { authInterceptorFn, SKIP_AUTH } from './auth-interceptor';
-import { AuthService } from '../services/auth/auth';
+import { AuthService } from '../../services/auth/auth';
 
 describe('authInterceptorFn', () => {
   let httpTestingController: HttpTestingController;

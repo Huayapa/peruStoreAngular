@@ -8,9 +8,9 @@ import {
 import { IAuthStorage, IRegisterResponse } from '../../interfaces/auth.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor';
-import { SKIP_AUTH } from '../../interceptors/auth-interceptor';
 import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
 import { jwtDecode } from 'jwt-decode';
+import { SKIP_AUTH } from '../../interceptors/auth-interceptor/auth-interceptor';
 
 jest.mock('jwt-decode');
 

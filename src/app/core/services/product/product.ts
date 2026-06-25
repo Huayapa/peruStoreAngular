@@ -3,10 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { IProduct } from '../../../shared/interfaces/product.interface';
-import { SKIP_AUTH } from '../../interceptors/auth-interceptor';
 import { HANDLE_CACHE_INTERCEPTOR } from '../../interceptors/cache-interceptor/cache-interceptor';
 import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
 import { IFilteredResult, IFilterProduct } from '../../interfaces/product.interface';
+import { SKIP_AUTH } from '../../interceptors/auth-interceptor/auth-interceptor';
 
 @Injectable({
   providedIn: 'root',

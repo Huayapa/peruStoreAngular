@@ -7,10 +7,10 @@ import { TestBed } from '@angular/core/testing';
 import { jwtDecode } from 'jwt-decode';
 import { firstValueFrom } from 'rxjs';
 import { SKIP_AUTH } from '../../interceptors/auth-interceptor/auth-interceptor';
-import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
 import { HANDLE_HTTP_INTERCEPTOR } from '../../interceptors/error-api-interceptor/error-api-interceptor';
 import { IAuthStorage, IRegisterResponse } from '../../interfaces/auth.interfaces';
 import { AuthService } from './auth';
+import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor/checkout-session-interceptor';
 
 jest.mock('jwt-decode');
 

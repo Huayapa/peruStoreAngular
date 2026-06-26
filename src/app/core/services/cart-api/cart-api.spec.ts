@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { CartApiService } from './cart-api';
 import { firstValueFrom } from 'rxjs';
 import { ICartResponse } from '../../interfaces/cart.interfaces';
-import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
+import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor/checkout-session-interceptor';
 
 describe('Cart API Service', () => {
   let service: CartApiService;

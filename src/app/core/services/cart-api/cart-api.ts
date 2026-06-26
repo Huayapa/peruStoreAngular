@@ -2,8 +2,8 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor';
 import { ICartResponse } from '../../interfaces/cart.interfaces';
+import { SKIP_SESSION } from '../../interceptors/checkout-session-interceptor/checkout-session-interceptor';
 
 @Injectable({
   providedIn: 'root',

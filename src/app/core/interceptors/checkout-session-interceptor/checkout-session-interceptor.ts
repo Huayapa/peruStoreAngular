@@ -1,6 +1,6 @@
 import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { CheckoutSessionService } from '../services/checkout/checkout-session';
+import { CheckoutSessionService } from '../../services/checkout/checkout-session';
 
 export const SKIP_SESSION = new HttpContextToken<boolean>(() => false);
 

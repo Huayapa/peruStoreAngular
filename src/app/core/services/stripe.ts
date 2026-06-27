@@ -7,7 +7,7 @@ import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http
 import { CartAdapter } from '../adapters/cart.adapter';
 import { IPaymentIntent } from '../interfaces/stripe.interfaces';
 import { IOrder } from '../interfaces/order.interfaces';
-import { SKIP_AUTH } from '../interceptors/auth-interceptor';
+import { SKIP_AUTH } from '../interceptors/auth-interceptor/auth-interceptor';
 
 @Injectable({
   providedIn: 'root',

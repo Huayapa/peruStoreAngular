@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "jest src/app/core/interceptors/checkout-session-interceptor/checkout-session-interceptor.spec.ts",
+    "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "ng lint",
     "format": "prettier --write \"./src/**/*.{ts,json,html}\"",

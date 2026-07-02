@@ -1,6 +1,7 @@
 <div class="pagination" data-testid="pagination-component">
   <button
     class="pagination__btn"
+    data-testid="left"
     matMiniFab
     (click)="pageChange.emit(page() - 1)"
     [disabled]="page() === 1"
@@ -19,6 +20,7 @@
   }
   <button
     class="pagination__btn"
+    data-testid="right"
     matMiniFab
     (click)="pageChange.emit(page() + 1)"
     [disabled]="page() === totalPages().length"

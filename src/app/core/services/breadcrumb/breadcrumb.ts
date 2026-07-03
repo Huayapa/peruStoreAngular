@@ -1,8 +1,8 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, filter } from 'rxjs';
-import { IBreadcrumb } from '../interfaces/breadcrumb.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { BehaviorSubject, filter } from 'rxjs';
+import { IBreadcrumb } from '../../interfaces/breadcrumb.interface';
 @Injectable({
   providedIn: 'root',
 })

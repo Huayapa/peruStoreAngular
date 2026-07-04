@@ -1,6 +1,6 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb-list">
-    @for (bc of breadcrumbs$ | async; track $index; let last = $last) {
+    @for (bc of breadcrumbs(); track $index; let last = $last) {
       <li class="breadcrumb-list__row">
         @if (bc.label === 'Inicio') {
           <button matIconButton [routerLink]="bc.url">

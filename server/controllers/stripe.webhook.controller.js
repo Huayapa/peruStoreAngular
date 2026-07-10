@@ -1,4 +1,3 @@
-import { inject } from "vitest";
 import orderService from "../services/order.service.js";
 import stripeService from "../services/stripe.service.js";
 import checkoutSessionService from "../services/checkoutSession.service.js";

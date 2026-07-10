@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --env-file=.env --watch server.js"
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "keywords": [],
   "author": "",

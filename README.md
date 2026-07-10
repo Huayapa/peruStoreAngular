@@ -8,8 +8,8 @@ Aplicación de e-commerce moderna desarrollada con Angular 21 y TypeScript. Impl
 
 - [Características](#características)
 - [Tecnologías](#tecnologías)
-- [Requisitos](#requisitos)
-- [Instalación](#instalación)
+- [Requisitos con Docker](#requisitos)
+- [Instalación con Docker](#instalación)
 - [Ejecución](#ejecución)
 - [Estructura](#estructura-del-proyecto)
 - [Arquitectura](#arquitectura)
@@ -74,34 +74,32 @@ Optimizaciones:
 | Prettier         | Latest  | Formateador de código     |
 | ESLint           | Latest  | Linting                   |
 | Vitest           | Latest  | Testing framework         |
+| Docker           | Latest  | Empaqueta en contenedores |
 
 ---
 
-## Requisitos
+## Requisitos con Docker
 
-**Frontend:**
+No es necesario instalar localmente Node.js, npm ni Angular CLI para ejecutar este proyecto.
 
-- Node.js v20 o superior
-- npm v11 o superior
-- Angular CLI v21.1+
+Requisitos mínimos:
 
-**Backend:**
-
-- Node.js v20 o superior
-- npm o pnpm
-- Clave API de Stripe (https://stripe.com)
+- Docker Desktop instalado y en ejecución
+- Docker Compose v2
+- Git
+- 4 GB de RAM recomendados
+- Clave API de Stripe para pagos reales
 
 Verificar instalación:
 
 ```bash
-node --version
-npm --version
-ng version
+docker --version
+docker compose version
 ```
 
 ---
 
-## Instalación
+## Instalación con Docker
 
 **1. Clonar repositorio:**
 
@@ -110,23 +108,7 @@ git clone <repository-url>
 cd peruStoreAngular
 ```
 
-**2. Instalar dependencias Frontend:**
-
-```bash
-npm install
-```
-
-**3. Instalar dependencias Backend:**
-
-```bash
-cd server
-npm install
-# o con pnpm
-pnpm install
-cd ..
-```
-
-**4. Configurar variables de entorno:**
+**2. Configurar variables de entorno del servidor:**
 
 Crear archivo `server/.env`:
 
@@ -148,48 +130,45 @@ export const environment = {
 };
 ```
 
+Construir y levantar los contenedores:
+
+**Acceder a la aplicación:**
+
+Frontend: http://localhost:4200
+Backend: http://localhost:3000
+
 ---
 
 ## Ejecución
 
-**Opción 1: Ejecutar ambos en paralelo (recomendado):**
-
-Terminal 1 - Backend:
+**Iniciar todos los servicios:**
 
 ```bash
-cd server
-npm start
+docker compose up
 ```
 
-Backend disponible en: http://localhost:3000/
-
-Terminal 2 - Frontend:
+**Detener los servicios:**
 
 ```bash
-npm start
+docker compose down
 ```
 
-Frontend disponible en: http://localhost:4200/
+**Ver logs en tiempo real:**
+
+```bash
+docker compose logs -f
+```
+
+**Reconstruir imágenes:**
+
+```bash
+docker compose up --build
+```
 
 **Credenciales de prueba:**
 
 - Usuario: mor_2314
 - Contraseña: 83r5^\_
-
-**Opción 2: Solo Frontend (usando FakeStore API):**
-
-```bash
-npm start
-```
-
-Build para producción:
-
-```bash
-npm run build
-npm run build --configuration production
-```
-
-Los archivos compilados se guardan en dist/peru-store-angular/
 
 ---
 
